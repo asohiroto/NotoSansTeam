@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Enemy2Move: MonoBehaviour
 {
-    public float EnemyMoveSpeed = 100f;
-    public float EnemyDistance = 3f;
+    public float EnemyMoveSpeed = 14f;
+    public float EnemyDistance = 1f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,11 +19,21 @@ public class Enemy2Move: MonoBehaviour
         float checkX = transform.position.x + Mathf.Sign(EnemyMoveSpeed) * EnemyDistance;
 
 
+        Vector3 checkPos = new Vector3(checkX, transform.position.y, transform.position.z);
 
-        if (transform.position.x >= 3 || transform.position.x <= -3)
+
+        bool isGround = Physics.Raycast(checkPos, Vector3.down, 1);
+
+
+
+        if (!isGround)
         {
             EnemyMoveSpeed = -EnemyMoveSpeed;
         }
-       
+
+      
+     
+
+
     }
 }
