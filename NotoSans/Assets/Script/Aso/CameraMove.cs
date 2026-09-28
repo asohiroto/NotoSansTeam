@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    private static readonly float k_distance = 3.0f;
+    // カメラのプレイヤーまでの距離
+    [SerializeField] private float k_distance = 5.0f;
 
     [SerializeField] private GameObject cameraObj_;
     [SerializeField] private GameObject playerObj_;
