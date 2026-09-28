@@ -3,11 +3,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttack : MonoBehaviour
 {
-    static private readonly Vector3 k_JumpAccel = new Vector3(0.0f, 1.0f, 0.0f);
+    // ジャンプ時の上向き加速度
+    [SerializeField] private Vector3 k_JumpAccel = new Vector3(0.0f, 0.1f, 0.0f);
 
     [SerializeField] private GameObject playerObj_;
+    [SerializeField] private GameObject bulletPrefab_;
     private Player player_;
-
     InputAction playerJump_;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,7 +23,19 @@ public class PlayerAttack : MonoBehaviour
     {
         if (playerJump_.WasPressedThisFrame())
         {
-            player_.speed_ += k_JumpAccel;
+            if (player_.remainAmmunition_ >= 1)
+            {
+                player_.remainAmmunition_--;
+                player_.speed_ = Vector3.zero;
+                player_.speed_ += k_JumpAccel;
+                GenerateBullet(bulletPrefab_);
+            }
+        }
+
+        // 特定の球を生成する関数
+        void GenerateBullet(GameObject bullet)
+        {
+            Instantiate(bullet, player_.transform.position, Quaternion.identity);
         }
     }
 }
