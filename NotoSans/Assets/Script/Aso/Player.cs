@@ -9,13 +9,15 @@ public class Player : MonoBehaviour
     // プレイヤーの左右移動限界
     [SerializeField] private float kPlayerLimitXPos_ = 1.0f;
     // 最大弾薬数
-    [SerializeField] private int k_MaxAmmunition = 3;
+    [SerializeField] public int k_MaxAmmunition = 3;
     private GameObject player_;
 
     // 残弾数
     public int remainAmmunition_ = 0;
     // 速度
     public Vector3 speed_ = Vector3.zero;
+    // 床の上にいるか
+    public bool isGround_ = false;
     // 左右移動の限界値保存用
     private float xMoveLimit_ = 0.0f;
 
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
         if (speed_.y <= kPlayerMinSpeed_.y)
         {
             speed_.y = kPlayerMinSpeed_.y;
@@ -45,6 +48,12 @@ public class Player : MonoBehaviour
             xMoveLimit_ = -kPlayerLimitXPos_;
         }
         player_.transform.position = new Vector3(xMoveLimit_, player_.transform.position.y, player_.transform.position.z);
+
+        if (isGround_)
+        {
+            speed_.y = 0.0f;
+            isGround_ = false;
+        }
         player_.transform.position += speed_;
     }
 }
