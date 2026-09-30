@@ -25,7 +25,7 @@ public class NormalBulletMove : MonoBehaviour
 
         if (bulletDistance_ > k_MaxBulletDistance)
         {
-            Destroy(bullet_);
+            Destroy(gameObject);
         }
     }
 }
