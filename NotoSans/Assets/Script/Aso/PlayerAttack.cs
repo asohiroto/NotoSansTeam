@@ -27,7 +27,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 player_.remainAmmunition_--;
                 player_.speed_ = Vector3.zero;
-                player_.speed_ += k_JumpAccel;
+                player_.jumpSpeed_ += k_JumpAccel;
                 GenerateBullet(bulletPrefab_);
             }
         }
