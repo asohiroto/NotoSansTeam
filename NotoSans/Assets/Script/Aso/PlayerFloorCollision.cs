@@ -18,8 +18,8 @@ public class PlayerFloorCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
+            // 弾の補充はPlayerの地面状態に入った瞬間に行う
             player_.isGround_ = true;
-            player_.remainAmmunition_ = player_.k_MaxAmmunition;
             Debug.Log("yuka");
             return;
         }

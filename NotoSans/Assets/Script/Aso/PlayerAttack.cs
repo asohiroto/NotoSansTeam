@@ -26,8 +26,7 @@ public class PlayerAttack : MonoBehaviour
             if (player_.remainAmmunition_ >= 1)
             {
                 player_.remainAmmunition_--;
-                player_.speed_ = Vector3.zero;
-                player_.jumpSpeed_ += k_JumpAccel;
+                player_.Jump(k_JumpAccel);
                 GenerateBullet(bulletPrefab_);
             }
         }
