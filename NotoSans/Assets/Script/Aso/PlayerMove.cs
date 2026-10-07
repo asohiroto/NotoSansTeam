@@ -8,7 +8,6 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] GameObject playerObj_;
     Player player_;
     InputAction playerMove_;
-    InputAction playerPitch_;
 
     private Vector2 inputValue_;
 
@@ -33,36 +32,31 @@ public class PlayerMove : MonoBehaviour
             player_ = playerObj_.GetComponent<Player>();
         }
         playerMove_ = InputSystem.actions.FindAction("Move");
-        playerPitch_ = InputSystem.actions.FindAction("Pitch");
     }
 
-    // Update is called once per frame
-    void Update()
+    // 正面⇔左を切り替える（モード切り替えアイテムを取ったときに呼ぶ）
+    public void ToggleMode()
     {
-        // プレイヤーが倒されて存在しなければ何もしない
-        if (player_ == null)
+        // プレイヤーが存在しない、または倒されて隠れている（リスポーン待ち）なら何もしない
+        if (player_ == null || !player_.gameObject.activeInHierarchy)
         {
             return;
         }
 
-        // 押した瞬間を取りこぼさないようにUpdateで判定する
-        if (playerPitch_.WasPressedThisFrame())
+        if (moveMode_ == MoveMode.Front)
         {
-            if (moveMode_ == MoveMode.Front)
-            {
-                ChangeMoveMode(MoveMode.Left);
-            }
-            else
-            {
-                ChangeMoveMode(MoveMode.Front);
-            }
+            ChangeMoveMode(MoveMode.Left);
+        }
+        else
+        {
+            ChangeMoveMode(MoveMode.Front);
         }
     }
 
     void FixedUpdate()
     {
-        // プレイヤーが倒されて存在しなければ何もしない
-        if (player_ == null)
+        // プレイヤーが存在しない、または倒されて隠れている（リスポーン待ち）なら何もしない
+        if (player_ == null || !player_.gameObject.activeInHierarchy)
         {
             return;
         }
@@ -107,5 +101,14 @@ public class PlayerMove : MonoBehaviour
                 break;
         }
         player_.transform.position = pos;
+
+        // 切り替えのエフェクト（プレイヤーについていく）
+        EffectManager.PlayModeSwitch(player_.transform);
+    }
+
+    // ステージのリセット: 正面モードに戻す（エフェクトは出さない）
+    public void ResetMode()
+    {
+        moveMode_ = MoveMode.Front;
     }
 }

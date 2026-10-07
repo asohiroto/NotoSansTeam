@@ -24,8 +24,8 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // プレイヤーが倒されて存在しなければ何もしない
-        if (player_ == null)
+        // プレイヤーが存在しない、または倒されて隠れている（リスポーン待ち）なら何もしない
+        if (player_ == null || !player_.gameObject.activeInHierarchy)
         {
             return;
         }
@@ -44,6 +44,7 @@ public class PlayerAttack : MonoBehaviour
         void GenerateBullet(GameObject bullet)
         {
             Instantiate(bullet, player_.transform.position, Quaternion.identity);
+            EffectManager.PlayMuzzle(player_.transform.position);
         }
     }
 }

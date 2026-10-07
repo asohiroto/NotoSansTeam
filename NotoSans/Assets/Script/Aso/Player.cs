@@ -82,15 +82,36 @@ public class Player : MonoBehaviour
         }
     }
 
-    // 体力を減らし、0以下になったらプレイヤーを消す
+    // 体力を減らし、0以下になったらステージをリセットしてやり直す
     public void Damage(int amount)
     {
         hp_ -= amount;
 
+        // エフェクトは体の中心（足元から 0.5 上）で再生する
+        Vector3 bodyCenter = transform.position + Vector3.up * 0.5f;
+
         if (hp_ <= 0)
         {
-            Destroy(gameObject);
+            EffectManager.PlayDeath(bodyCenter);
+            // プレイヤーを隠し、少し待ってからステージをリセットして初期位置に戻す
+            StageManager.OnPlayerDied();
         }
+        else
+        {
+            EffectManager.PlayDamage(bodyCenter);
+        }
+    }
+
+    // 初期位置・体力・弾薬・速度・状態を最初の状態に戻す（StageManager から呼ぶ）
+    public void Respawn()
+    {
+        transform.position = kFirstPosition_;
+        hp_ = k_MaxHp;
+        remainAmmunition_ = k_MaxAmmunition;
+        speed_ = Vector3.zero;
+        jumpSpeed_ = Vector3.zero;
+        isGround_ = false;
+        state_ = PlayerState.Air;
     }
 
     // Update is called once per frame
@@ -216,6 +237,7 @@ public class Player : MonoBehaviour
         {
             speed_ = Vector3.zero;
             remainAmmunition_ = k_MaxAmmunition;
+            EffectManager.PlayLand(player_.transform.position);
         }
     }
 
