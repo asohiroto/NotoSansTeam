@@ -22,12 +22,18 @@ public class CameraMove : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log(playerObj_.transform.position);
-
         if (playerMove_ == null)
         {
             playerMove_ = FindFirstObjectByType<PlayerMove>();
         }
+
+        // プレイヤーが存在しなければ何もしない
+        if (playerObj_ == null)
+        {
+            return;
+        }
+
+        Debug.Log(playerObj_.transform.position);
 
         currentDir_ = GetTargetDir();
         fromDir_ = currentDir_;
@@ -38,6 +44,12 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // プレイヤーが倒されて存在しなければ、カメラはその場で止める
+        if (playerObj_ == null)
+        {
+            return;
+        }
+
         Vector3 target = GetTargetDir();
 
         // 目標方向が変わったら、今の方向から補間し直す

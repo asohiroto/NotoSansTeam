@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -16,10 +17,20 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject limitFloorObj_;
     // 最大弾薬数
     [SerializeField] public int k_MaxAmmunition = 3;
+    // 最大体力
+    [SerializeField] public int k_MaxHp = 3;
+    // 壁や床の手前で止まるときに空ける隙間
+    [SerializeField] private float kSkinWidth_ = 0.01f;
+    // 足元に床があるか調べる距離
+    [SerializeField] private float kGroundCheckDistance_ = 0.05f;
     private GameObject player_;
+    private Rigidbody rigidbody_;
 
     // 残弾数
     public int remainAmmunition_ = 0;
+    // 体力
+    public int hp_ = 0;
+    InputAction playerDamage_;
     // 速度
     public Vector3 speed_ = Vector3.zero;
     // ジャンプ時の速度
@@ -47,8 +58,11 @@ public class Player : MonoBehaviour
     void Start()
     {
         player_ = gameObject;
+        rigidbody_ = GetComponent<Rigidbody>();
         player_.transform.position = kFirstPosition_;
         remainAmmunition_ = k_MaxAmmunition;
+        hp_ = k_MaxHp;
+        playerDamage_ = InputSystem.actions.FindAction("Damage");
 
         if (limitFloorObj_ != null)
         {
@@ -56,6 +70,26 @@ public class Player : MonoBehaviour
             float halfWidth = limitFloorObj_.GetComponent<Collider>().bounds.extents.x;
             kPlayerLimitXPos_ = halfWidth;
             kPlayerLimitZPos_ = halfWidth;
+        }
+    }
+
+    void Update()
+    {
+        // 押した瞬間を取りこぼさないようにUpdateで判定する（三角ボタン）
+        if (playerDamage_ != null && playerDamage_.WasPressedThisFrame())
+        {
+            Damage(1);
+        }
+    }
+
+    // 体力を減らし、0以下になったらプレイヤーを消す
+    public void Damage(int amount)
+    {
+        hp_ -= amount;
+
+        if (hp_ <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -77,8 +111,44 @@ public class Player : MonoBehaviour
                 break;
         }
 
-        // 接地判定は毎フレームPlayerFloorCollisionが立て直す
-        isGround_ = false;
+        isGround_ = state_ == PlayerState.Ground;
+    }
+
+    // delta だけ移動する。途中に何かあれば、その手前で止まって true を返す
+    public bool MoveWithCollision(Vector3 delta, out RaycastHit hit)
+    {
+        hit = new RaycastHit();
+        float distance = delta.magnitude;
+        if (distance <= 0.0f)
+        {
+            return false;
+        }
+
+        // 直前に動かしたTransformを物理側に反映してから調べる
+        Physics.SyncTransforms();
+
+        Vector3 dir = delta / distance;
+        if (rigidbody_.SweepTest(dir, out hit, distance + kSkinWidth_, QueryTriggerInteraction.Ignore))
+        {
+            player_.transform.position += dir * Mathf.Max(hit.distance - kSkinWidth_, 0.0f);
+            return true;
+        }
+
+        player_.transform.position += delta;
+        return false;
+    }
+
+    // 足元に床があるか
+    bool CheckGround()
+    {
+        Physics.SyncTransforms();
+
+        RaycastHit hit;
+        if (rigidbody_.SweepTest(Vector3.down, out hit, kGroundCheckDistance_, QueryTriggerInteraction.Ignore))
+        {
+            return hit.collider.CompareTag("Floor");
+        }
+        return false;
     }
 
     // ジャンプを開始する（PlayerAttackから呼ぶ）
@@ -98,20 +168,25 @@ public class Player : MonoBehaviour
             speed_.y = kPlayerMinSpeed_.y;
         }
 
-        // 上昇中は床に触れていても着地しない（ジャンプ直後の床接触で止まらないように）
-        if (isGround_ && speed_.y <= 0.0f)
+        RaycastHit hit;
+        if (MoveWithCollision(new Vector3(0.0f, speed_.y, 0.0f), out hit))
         {
-            ChangeState(PlayerState.Ground);
-            return;
-        }
+            // 落下中に床に当たったら着地
+            if (speed_.y <= 0.0f && hit.collider.CompareTag("Floor"))
+            {
+                ChangeState(PlayerState.Ground);
+                return;
+            }
 
-        player_.transform.position += speed_;
+            // 上昇中に床の下から当たったら、頭をぶつけて上昇をやめる
+            speed_.y = 0.0f;
+        }
     }
 
-    // 地面の上：止まって弾を補充し、床から離れたら空中へ
+    // 地面の上：止まって弾を補充し、足元の床が無くなったら空中へ
     void UpdateGround()
     {
-        if (!isGround_)
+        if (!CheckGround())
         {
             ChangeState(PlayerState.Air);
         }
@@ -122,7 +197,13 @@ public class Player : MonoBehaviour
     {
         speed_ = jumpSpeed_;
         jumpSpeed_ = Vector3.zero;
-        player_.transform.position += speed_;
+
+        RaycastHit hit;
+        if (MoveWithCollision(new Vector3(0.0f, speed_.y, 0.0f), out hit))
+        {
+            // 真上に床があってすぐ頭をぶつけた
+            speed_.y = 0.0f;
+        }
         ChangeState(PlayerState.Air);
     }
 
