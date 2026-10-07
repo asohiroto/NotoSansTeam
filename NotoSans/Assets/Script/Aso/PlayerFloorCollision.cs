@@ -18,8 +18,7 @@ public class PlayerFloorCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            // 弾の補充はPlayerの地面状態に入った瞬間に行う
-            player_.isGround_ = true;
+            // 接地判定と弾の補充はPlayer側（SweepTest）で行う
             Debug.Log("yuka");
             return;
         }

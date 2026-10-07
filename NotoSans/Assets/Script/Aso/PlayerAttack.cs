@@ -14,13 +14,22 @@ public class PlayerAttack : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        player_ = playerObj_.GetComponent<Player>();
+        if (playerObj_ != null)
+        {
+            player_ = playerObj_.GetComponent<Player>();
+        }
         playerJump_ = InputSystem.actions.FindAction("Jump");
     }
 
     // Update is called once per frame
     void Update()
     {
+        // プレイヤーが倒されて存在しなければ何もしない
+        if (player_ == null)
+        {
+            return;
+        }
+
         if (playerJump_.WasPressedThisFrame())
         {
             if (player_.remainAmmunition_ >= 1)

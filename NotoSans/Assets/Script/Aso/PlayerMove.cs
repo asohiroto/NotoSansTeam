@@ -28,7 +28,10 @@ public class PlayerMove : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        player_ = playerObj_.GetComponent<Player>();
+        if (playerObj_ != null)
+        {
+            player_ = playerObj_.GetComponent<Player>();
+        }
         playerMove_ = InputSystem.actions.FindAction("Move");
         playerPitch_ = InputSystem.actions.FindAction("Pitch");
     }
@@ -36,6 +39,12 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // プレイヤーが倒されて存在しなければ何もしない
+        if (player_ == null)
+        {
+            return;
+        }
+
         // 押した瞬間を取りこぼさないようにUpdateで判定する
         if (playerPitch_.WasPressedThisFrame())
         {
@@ -52,21 +61,32 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        // プレイヤーが倒されて存在しなければ何もしない
+        if (player_ == null)
+        {
+            return;
+        }
+
         // 重力はPlayerの空中状態で処理する
         inputValue_ = playerMove_.ReadValue<Vector2>();
 
         if (inputValue_.magnitude > 0.0f)
         {
+            Vector3 move = Vector3.zero;
             switch (moveMode_)
             {
                 case MoveMode.Front:
-                    player_.transform.position += k_LRMoveSpeed * inputValue_.x;
+                    move = k_LRMoveSpeed * inputValue_.x;
                     break;
                 case MoveMode.Left:
                     // カメラが左から見ているので、画面の右がZのプラスになるよう符号を反転する
-                    player_.transform.position += new Vector3(0.0f, 0.0f, -k_LRMoveSpeed.x) * inputValue_.x;
+                    move = new Vector3(0.0f, 0.0f, -k_LRMoveSpeed.x) * inputValue_.x;
                     break;
             }
+
+            // 横から床に当たったら、その手前で止まる
+            RaycastHit hit;
+            player_.MoveWithCollision(move, out hit);
         }
     }
 
