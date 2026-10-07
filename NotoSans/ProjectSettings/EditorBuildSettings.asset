@@ -14,5 +14,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RyoStage3Scene.unity
     guid: 74a237af72b2b314aabe8cf01dce6889
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: 5b47a02b1112c9a4785599bed749c122
+  - enabled: 1
+    path: Assets/Scenes/ibukiScene1.unity
+    guid: 77f58736196a96f4cbff7fe013292e6d
+  - enabled: 1
+    path: Assets/Scenes/GameClearScene.unity
+    guid: d4f85e4084004f74ab1cb16a0e426265
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 65ddd3c3a82918d4494058beeb5ffb6a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b63883c9ba185ac41833015f5ebaf2ca, type: 3}
