@@ -9,12 +9,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 kPlayerMinSpeed_ = new Vector3(0.0f, -0.3f, 0.0f);
     // 重力加速度
     [SerializeField] private Vector3 kGravityAccel_ = new Vector3(0.0f, -0.003f, 0.0f);
-    // プレイヤーの左右移動限界
-    [SerializeField] private float kPlayerLimitXPos_ = 1.0f;
-    [SerializeField] private float kPlayerLimitYPos_ = 1.0f;
-    [SerializeField] private float kPlayerLimitZPos_ = 1.0f;
-    // 行動制限の基準にする床（設定するとX・Zの制限をこの床の幅に合わせる）
-    [SerializeField] private GameObject limitFloorObj_;
     // 最大弾薬数
     [SerializeField] public int k_MaxAmmunition = 3;
     // 最大体力
@@ -37,9 +31,6 @@ public class Player : MonoBehaviour
     public Vector3 jumpSpeed_ = Vector3.zero;
     // 床の上にいるか
     public bool isGround_ = false;
-    // 左右移動の限界値保存用
-    private float xMoveLimit_ = 0.0f;
-    private float yMoveLimit_ = 0.0f;
 
     enum PlayerState
     {
@@ -63,14 +54,6 @@ public class Player : MonoBehaviour
         remainAmmunition_ = k_MaxAmmunition;
         hp_ = k_MaxHp;
         playerDamage_ = InputSystem.actions.FindAction("Damage");
-
-        if (limitFloorObj_ != null)
-        {
-            // 床の横幅の半分を左右の限界にする（左モードのZ方向も同じ幅）
-            float halfWidth = limitFloorObj_.GetComponent<Collider>().bounds.extents.x;
-            kPlayerLimitXPos_ = halfWidth;
-            kPlayerLimitZPos_ = halfWidth;
-        }
     }
 
     void Update()
@@ -117,8 +100,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        PositionLimitCorrection();
-
         switch (state_)
         {
             case PlayerState.Air:
@@ -239,33 +220,5 @@ public class Player : MonoBehaviour
             remainAmmunition_ = k_MaxAmmunition;
             EffectManager.PlayLand(player_.transform.position);
         }
-    }
-
-    void PositionLimitCorrection()
-    {
-        xMoveLimit_ = player_.transform.position.x;
-        yMoveLimit_ = player_.transform.position.y;
-
-        if (player_.transform.position.x > kPlayerLimitXPos_)
-        {
-            xMoveLimit_ = kPlayerLimitXPos_;
-        }
-        else if (player_.transform.position.x < -kPlayerLimitXPos_)
-        {
-            xMoveLimit_ = -kPlayerLimitXPos_;
-        }
-
-        if (player_.transform.position.y > kPlayerLimitYPos_)
-        {
-            yMoveLimit_ = kPlayerLimitYPos_;
-        }
-        else if (player_.transform.position.y < -kPlayerLimitYPos_)
-        {
-            yMoveLimit_ = -kPlayerLimitYPos_;
-        }
-
-        float zMoveLimit = Mathf.Clamp(player_.transform.position.z, -kPlayerLimitZPos_, kPlayerLimitZPos_);
-
-        player_.transform.position = new Vector3(xMoveLimit_, player_.transform.position.y, zMoveLimit);
     }
 }
