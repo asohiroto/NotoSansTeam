@@ -6,6 +6,14 @@ public class CameraMove : MonoBehaviour
     [SerializeField] private float k_distance = 5.0f;
     // モード切り替え時にカメラが回り込むまでの時間（秒）
     [SerializeField] private float k_switchTime = 0.5f;
+    // カメラがとらえるプレイヤーの中心の高さ（足元からの高さ）
+    [SerializeField] private float k_PlayerCenterHeight = 0.5f;
+    // 落下中に下を見る量: 落下速度（Player.speed_.y、1回の物理更新あたり）× この値
+    [SerializeField] private float k_LookDownPerSpeed = 10.0f;
+    // 下を見る量の上限
+    [SerializeField] private float k_MaxLookDown = 3.0f;
+    // 下を見る量を目標へ近づける速さ（大きいほど速く追いつく）
+    [SerializeField] private float k_LookDownLerpRate = 4.0f;
 
     [SerializeField] private GameObject cameraObj_;
     [SerializeField] private GameObject playerObj_;
@@ -20,6 +28,10 @@ public class CameraMove : MonoBehaviour
     private Vector3 currentDir_;
     // 切り替え開始からの経過時間
     private float elapsed_;
+
+    // プレイヤー（落下速度を読むため）と、今どれだけ下を見ているか
+    private Player player_;
+    private float lookDown_ = 0.0f;
 
     // 背景を回す基準（正面モードのカメラの向きと、そのときの背景の位置・回転）
     private Vector3 frontDir_;
@@ -41,6 +53,8 @@ public class CameraMove : MonoBehaviour
         }
 
         Debug.Log(playerObj_.transform.position);
+
+        player_ = playerObj_.GetComponent<Player>();
 
         currentDir_ = GetTargetDir();
         fromDir_ = currentDir_;
@@ -80,10 +94,26 @@ public class CameraMove : MonoBehaviour
         // 方向をLerpし、長さを1に戻して距離を一定に保つ
         currentDir_ = Vector3.Lerp(fromDir_, toDir_, t).normalized;
 
-        cameraObj_.transform.position = playerObj_.transform.position + currentDir_ * k_distance;
-        cameraObj_.transform.LookAt(playerObj_.transform.position);
+        // 落下が速いほど下を見る。床に着く（speed_ が 0 になる）と目標が 0 になり、Lerp でプレイヤーの中心へ戻る
+        float targetLookDown = 0.0f;
+        if (player_ != null)
+        {
+            targetLookDown = Mathf.Clamp(-player_.speed_.y * k_LookDownPerSpeed, 0.0f, k_MaxLookDown);
+        }
+        // フレームレートに左右されない補間率
+        float lerpT = 1.0f - Mathf.Exp(-k_LookDownLerpRate * Time.fixedDeltaTime);
+        lookDown_ = Mathf.Lerp(lookDown_, targetLookDown, lerpT);
 
+        PlaceCamera();
         RotateBackground();
+    }
+
+    // プレイヤーの中心から currentDir_ 方向に離れた位置に置き、中心より lookDown_ だけ下を見る
+    void PlaceCamera()
+    {
+        Vector3 center = playerObj_.transform.position + Vector3.up * k_PlayerCenterHeight;
+        cameraObj_.transform.position = center + currentDir_ * k_distance;
+        cameraObj_.transform.LookAt(center + Vector3.down * lookDown_);
     }
 
     // ステージのリセット: 補間せず、すぐに今のモードの向き（正面）へ戻す
@@ -98,9 +128,9 @@ public class CameraMove : MonoBehaviour
         fromDir_ = currentDir_;
         toDir_ = currentDir_;
         elapsed_ = k_switchTime;
+        lookDown_ = 0.0f;
 
-        cameraObj_.transform.position = playerObj_.transform.position + currentDir_ * k_distance;
-        cameraObj_.transform.LookAt(playerObj_.transform.position);
+        PlaceCamera();
         RotateBackground();
     }
 
