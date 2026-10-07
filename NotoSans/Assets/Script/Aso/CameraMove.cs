@@ -11,6 +11,8 @@ public class CameraMove : MonoBehaviour
     [SerializeField] private GameObject playerObj_;
     // 移動モードの参照先（未設定ならシーンから探す）
     [SerializeField] private PlayerMove playerMove_;
+    // 背景（カメラと同じ角度だけ、ステージの中心軸のまわりを回す）
+    [SerializeField] private GameObject backgroundObj_;
 
     // 補間の開始方向・目標方向・現在の方向
     private Vector3 fromDir_;
@@ -19,12 +21,17 @@ public class CameraMove : MonoBehaviour
     // 切り替え開始からの経過時間
     private float elapsed_;
 
+    // 背景を回す基準（正面モードのカメラの向きと、そのときの背景の位置・回転）
+    private Vector3 frontDir_;
+    private Vector3 backgroundBasePos_;
+    private Quaternion backgroundBaseRot_;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (playerMove_ == null)
         {
-            playerMove_ = FindFirstObjectByType<PlayerMove>();
+            playerMove_ = FindAnyObjectByType<PlayerMove>();
         }
 
         // プレイヤーが存在しなければ何もしない
@@ -39,6 +46,14 @@ public class CameraMove : MonoBehaviour
         fromDir_ = currentDir_;
         toDir_ = currentDir_;
         elapsed_ = k_switchTime;
+
+        // シーンに置いた背景の状態を、正面モードのときの基準として覚えておく
+        frontDir_ = playerObj_.transform.forward;
+        if (backgroundObj_ != null)
+        {
+            backgroundBasePos_ = backgroundObj_.transform.position;
+            backgroundBaseRot_ = backgroundObj_.transform.rotation;
+        }
     }
 
     // Update is called once per frame
@@ -67,6 +82,42 @@ public class CameraMove : MonoBehaviour
 
         cameraObj_.transform.position = playerObj_.transform.position + currentDir_ * k_distance;
         cameraObj_.transform.LookAt(playerObj_.transform.position);
+
+        RotateBackground();
+    }
+
+    // ステージのリセット: 補間せず、すぐに今のモードの向き（正面）へ戻す
+    public void ResetView()
+    {
+        if (playerObj_ == null)
+        {
+            return;
+        }
+
+        currentDir_ = GetTargetDir();
+        fromDir_ = currentDir_;
+        toDir_ = currentDir_;
+        elapsed_ = k_switchTime;
+
+        cameraObj_.transform.position = playerObj_.transform.position + currentDir_ * k_distance;
+        cameraObj_.transform.LookAt(playerObj_.transform.position);
+        RotateBackground();
+    }
+
+    // 背景を、カメラが正面から回り込んだ角度と同じだけ回す（ステージの中心＝X=0, Z=0 の縦軸まわり）
+    void RotateBackground()
+    {
+        if (backgroundObj_ == null)
+        {
+            return;
+        }
+
+        float yaw = Vector3.SignedAngle(frontDir_, currentDir_, Vector3.up);
+        Quaternion turn = Quaternion.Euler(0.0f, yaw, 0.0f);
+        Vector3 pivot = new Vector3(0.0f, backgroundBasePos_.y, 0.0f);
+
+        backgroundObj_.transform.position = pivot + turn * (backgroundBasePos_ - pivot);
+        backgroundObj_.transform.rotation = turn * backgroundBaseRot_;
     }
 
     // 移動モードに応じたカメラの方向

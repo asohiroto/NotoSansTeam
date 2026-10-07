@@ -1,6 +1,11 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="com.unity.animations.springbone.editor.csproj" />
+  <Project Path="EffekseerEditor.csproj" />
   <Project Path="com.unity.animations.springbone.csproj" />
+  <Project Path="Effekseer.csproj" />
+  <Project Path="Effekseer.PostProcessing.csproj" />
+  <Project Path="Effekseer.URP.csproj" />
+  <Project Path="Effekseer.HDRP.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>
