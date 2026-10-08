@@ -15,7 +15,7 @@ public class ModeSwitchItem : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // プレイヤー以外（弾など）は無視
-        if (other.GetComponent<Player>() == null)
+        if (other.GetComponent<NormalBulletMove>() == null && other.GetComponent<Player>() == null)
         {
             return;
         }

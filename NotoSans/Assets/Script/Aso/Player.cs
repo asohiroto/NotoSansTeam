@@ -58,31 +58,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // 押した瞬間を取りこぼさないようにUpdateで判定する（三角ボタン）
-        if (playerDamage_ != null && playerDamage_.WasPressedThisFrame())
-        {
-            Damage(1);
-        }
-    }
 
-    // 体力を減らし、0以下になったらステージをリセットしてやり直す
-    public void Damage(int amount)
-    {
-        hp_ -= amount;
-
-        // エフェクトは体の中心（足元から 0.5 上）で再生する
-        Vector3 bodyCenter = transform.position + Vector3.up * 0.5f;
-
-        if (hp_ <= 0)
-        {
-            EffectManager.PlayDeath(bodyCenter);
-            // プレイヤーを隠し、少し待ってからステージをリセットして初期位置に戻す
-            StageManager.OnPlayerDied();
-        }
-        else
-        {
-            EffectManager.PlayDamage(bodyCenter);
-        }
     }
 
     // 初期位置・体力・弾薬・速度・状態を最初の状態に戻す（StageManager から呼ぶ）
@@ -100,20 +76,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        switch (state_)
-        {
-            case PlayerState.Air:
-                UpdateAir();
-                break;
-            case PlayerState.Ground:
-                UpdateGround();
-                break;
-            case PlayerState.JumpStart:
-                UpdateJumpStart();
-                break;
-        }
-
-        isGround_ = state_ == PlayerState.Ground;
+        UpdateAir();
     }
 
     // delta だけ移動する。途中に何かあれば、その手前で止まって true を返す
@@ -140,25 +103,6 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    // 足元に床があるか
-    bool CheckGround()
-    {
-        Physics.SyncTransforms();
-
-        RaycastHit hit;
-        if (rigidbody_.SweepTest(Vector3.down, out hit, kGroundCheckDistance_, QueryTriggerInteraction.Ignore))
-        {
-            return hit.collider.CompareTag("Floor");
-        }
-        return false;
-    }
-
-    // ジャンプを開始する（PlayerAttackから呼ぶ）
-    public void Jump(Vector3 jumpSpeed)
-    {
-        jumpSpeed_ = jumpSpeed;
-        state_ = PlayerState.JumpStart;
-    }
 
     // 空中：重力で落下し、落下中に床に触れたら着地
     void UpdateAir()
@@ -173,10 +117,15 @@ public class Player : MonoBehaviour
         RaycastHit hit;
         if (MoveWithCollision(new Vector3(0.0f, speed_.y, 0.0f), out hit))
         {
+            // エフェクトは体の中心（足元から 0.5 上）で再生する
+            Vector3 bodyCenter = transform.position + Vector3.up * 0.5f;
+
             // 落下中に床に当たったら着地
             if (speed_.y <= 0.0f && hit.collider.CompareTag("Floor"))
             {
-                ChangeState(PlayerState.Ground);
+                EffectManager.PlayDeath(bodyCenter);
+                // プレイヤーを隠し、少し待ってからステージをリセットして初期位置に戻す
+                StageManager.OnPlayerDied();
                 return;
             }
 
@@ -185,40 +134,4 @@ public class Player : MonoBehaviour
         }
     }
 
-    // 地面の上：止まって弾を補充し、足元の床が無くなったら空中へ
-    void UpdateGround()
-    {
-        if (!CheckGround())
-        {
-            ChangeState(PlayerState.Air);
-        }
-    }
-
-    // ジャンプした瞬間：上向きの速度を1回だけ与えて空中へ
-    void UpdateJumpStart()
-    {
-        speed_ = jumpSpeed_;
-        jumpSpeed_ = Vector3.zero;
-
-        RaycastHit hit;
-        if (MoveWithCollision(new Vector3(0.0f, speed_.y, 0.0f), out hit))
-        {
-            // 真上に床があってすぐ頭をぶつけた
-            speed_.y = 0.0f;
-        }
-        ChangeState(PlayerState.Air);
-    }
-
-    void ChangeState(PlayerState next)
-    {
-        state_ = next;
-
-        // 状態に入った瞬間の処理
-        if (next == PlayerState.Ground)
-        {
-            speed_ = Vector3.zero;
-            remainAmmunition_ = k_MaxAmmunition;
-            EffectManager.PlayLand(player_.transform.position);
-        }
-    }
 }
