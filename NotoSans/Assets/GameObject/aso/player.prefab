@@ -1396,7 +1396,7 @@ GameObject:
   - component: {fileID: 5366847991758072936}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1497,10 +1497,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   kFirstPosition_: {x: 0, y: 10, z: 0}
   kPlayerMinSpeed_: {x: 0, y: -0.3, z: 0}
-  kPlayerLimitXPos_: 10
+  kGravityAccel_: {x: 0, y: -0.003, z: 0}
   k_MaxAmmunition: 3
+  k_MaxHp: 3
+  kSkinWidth_: 0.01
+  kGroundCheckDistance_: 0.05
   remainAmmunition_: 3
+  hp_: 0
   speed_: {x: 0, y: 0, z: 0}
+  jumpSpeed_: {x: 0, y: 0, z: 0}
+  isGround_: 0
 --- !u!1 &3035940203431382957
 GameObject:
   m_ObjectHideFlags: 0
