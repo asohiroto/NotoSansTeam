@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerAttack : MonoBehaviour
 {
     // ジャンプ時の上向き加速度
-    [SerializeField] private Vector3 k_JumpAccel = new Vector3(0.0f, 0.1f, 0.0f);
+    [SerializeField] private Vector3 k_JumpAccel = new Vector3(0.0f, 0.0f, 0.0f);
 
     [SerializeField] private GameObject playerObj_;
     [SerializeField] private GameObject bulletPrefab_;
@@ -34,8 +34,6 @@ public class PlayerAttack : MonoBehaviour
         {
             if (player_.remainAmmunition_ >= 1)
             {
-                player_.remainAmmunition_--;
-                player_.Jump(k_JumpAccel);
                 GenerateBullet(bulletPrefab_);
             }
         }
