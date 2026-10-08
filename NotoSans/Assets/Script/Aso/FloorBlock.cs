@@ -24,20 +24,6 @@ public class FloorBlock : MonoBehaviour
             EffectManager.PlayHit(other.transform.position);
             return;
         }
-
-        hitCount_++;
-
-        if (hitCount_ >= k_MaxHit)
-        {
-            EffectManager.PlayBlockBreak(transform.position);
-            // ステージのリセットで元に戻せるよう、消さずに非表示にする
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            // まだ壊れないときは、弾が当たった場所にヒットのエフェクト
-            EffectManager.PlayHit(other.transform.position);
-        }
     }
 
     // ステージのリセット: 当たった回数を戻して、再び表示する
