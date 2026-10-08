@@ -221,4 +221,12 @@ public class Player : MonoBehaviour
             EffectManager.PlayLand(player_.transform.position);
         }
     }
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Damage(1);
+            return;
+        }
+    }
 }
