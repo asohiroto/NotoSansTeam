@@ -1394,6 +1394,7 @@ GameObject:
   - component: {fileID: 2651393948687773887}
   - component: {fileID: 6654188827506998094}
   - component: {fileID: 5366847991758072936}
+  - component: {fileID: 6313244382976852943}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -1429,7 +1430,7 @@ Animator:
   m_GameObject: {fileID: 2943658812467335142}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 41950de12c96f384998c9021c2cd0061, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7c20750991ed6d547adb94e753feca5c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 07c35221021fc1d4bb98ef816806e795, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1507,6 +1508,23 @@ MonoBehaviour:
   speed_: {x: 0, y: 0, z: 0}
   jumpSpeed_: {x: 0, y: 0, z: 0}
   isGround_: 0
+--- !u!114 &6313244382976852943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2943658812467335142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f107d871f3c23354495e245a65e39080, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAppeal
+  k_SouthState: Appeal_Clap
+  k_EastState: Appeal_Spin3
+  k_NorthState: Appeal_Spin4
+  k_WestState: Appeal_StandC
+  k_CrossFadeTime: 0.15
 --- !u!1 &3035940203431382957
 GameObject:
   m_ObjectHideFlags: 0

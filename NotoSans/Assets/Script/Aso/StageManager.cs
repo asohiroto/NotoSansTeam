@@ -12,6 +12,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] private Player player_;
     [SerializeField] private PlayerMove playerMove_;
     [SerializeField] private CameraMove cameraMove_;
+    // ステージ全体を回す（未設定ならシーンから探し、なければ自分に付ける）
+    [SerializeField] private StageRotate stageRotate_;
 
     // ステージ上のすべての床ブロック（壊れて非表示のものも含む）
     private List<FloorBlock> blocks_ = new List<FloorBlock>();
@@ -38,6 +40,15 @@ public class StageManager : MonoBehaviour
     void Awake()
     {
         instance_ = this;
+
+        if (stageRotate_ == null)
+        {
+            stageRotate_ = FindAnyObjectByType<StageRotate>();
+        }
+        if (stageRotate_ == null)
+        {
+            stageRotate_ = gameObject.AddComponent<StageRotate>();
+        }
     }
 
     void OnDestroy()
@@ -105,6 +116,10 @@ public class StageManager : MonoBehaviour
             if (playerMove_ != null)
             {
                 playerMove_.ResetMode();
+            }
+            if (stageRotate_ != null)
+            {
+                stageRotate_.ResetRotation();
             }
             player_.gameObject.SetActive(true);
             if (cameraMove_ != null)

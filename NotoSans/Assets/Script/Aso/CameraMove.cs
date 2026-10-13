@@ -4,7 +4,7 @@ public class CameraMove : MonoBehaviour
 {
     // カメラのプレイヤーまでの距離
     [SerializeField] private float k_distance = 5.0f;
-    // モード切り替え時にカメラが回り込むまでの時間（秒）
+    // モード切り替え時にカメラが回り込むまでの時間（秒）。ステージの回転（StageRotate）より遅くする
     [SerializeField] private float k_switchTime = 0.5f;
     // カメラがとらえるプレイヤーの中心の高さ（足元からの高さ）
     [SerializeField] private float k_PlayerCenterHeight = 0.5f;
@@ -21,10 +21,14 @@ public class CameraMove : MonoBehaviour
     [SerializeField] private PlayerMove playerMove_;
     // 背景（カメラと同じ角度だけ、ステージの中心軸のまわりを回す）
     [SerializeField] private GameObject backgroundObj_;
+    // 背景（ステージと一緒には回さないので、StageRotate から参照する）
+    public GameObject Background { get { return backgroundObj_; } }
 
-    // 補間の開始方向・目標方向・現在の方向
-    private Vector3 fromDir_;
-    private Vector3 toDir_;
+    // 補間の開始角度・目標角度・現在の角度（正面から左回りに回り込んだ角度）
+    private float fromYaw_;
+    private float toYaw_;
+    private float currentYaw_;
+    // 現在のカメラの方向
     private Vector3 currentDir_;
     // 切り替え開始からの経過時間
     private float elapsed_;
@@ -33,7 +37,7 @@ public class CameraMove : MonoBehaviour
     private Player player_;
     private float lookDown_ = 0.0f;
 
-    // 背景を回す基準（正面モードのカメラの向きと、そのときの背景の位置・回転）
+    // 正面モードのカメラの向きと、そのときの背景の位置・回転
     private Vector3 frontDir_;
     private Vector3 backgroundBasePos_;
     private Quaternion backgroundBaseRot_;
@@ -56,17 +60,25 @@ public class CameraMove : MonoBehaviour
 
         player_ = playerObj_.GetComponent<Player>();
 
-        currentDir_ = GetTargetDir();
-        fromDir_ = currentDir_;
-        toDir_ = currentDir_;
-        elapsed_ = k_switchTime;
-
         // シーンに置いた背景の状態を、正面モードのときの基準として覚えておく
         frontDir_ = playerObj_.transform.forward;
         if (backgroundObj_ != null)
         {
             backgroundBasePos_ = backgroundObj_.transform.position;
             backgroundBaseRot_ = backgroundObj_.transform.rotation;
+        }
+
+        SnapToTarget();
+
+        // 最高速で落ちているときに画面の両端に流れる集中線（カメラに付ける）
+        if (cameraObj_ != null)
+        {
+            SpeedLineEffect speedLine = cameraObj_.GetComponent<SpeedLineEffect>();
+            if (speedLine == null)
+            {
+                speedLine = cameraObj_.AddComponent<SpeedLineEffect>();
+            }
+            speedLine.Init(player_);
         }
     }
 
@@ -79,20 +91,20 @@ public class CameraMove : MonoBehaviour
             return;
         }
 
-        Vector3 target = GetTargetDir();
+        float target = GetTargetYaw();
 
-        // 目標方向が変わったら、今の方向から補間し直す
-        if (target != toDir_)
+        // 目標の角度が変わったら、今の角度から補間し直す
+        if (target != toYaw_)
         {
-            fromDir_ = currentDir_;
-            toDir_ = target;
+            fromYaw_ = currentYaw_;
+            toYaw_ = target;
             elapsed_ = 0.0f;
         }
 
         elapsed_ += Time.fixedDeltaTime;
         float t = Mathf.Clamp01(elapsed_ / k_switchTime);
-        // 方向をLerpし、長さを1に戻して距離を一定に保つ
-        currentDir_ = Vector3.Lerp(fromDir_, toDir_, t).normalized;
+        currentYaw_ = Mathf.Lerp(fromYaw_, toYaw_, t);
+        currentDir_ = Quaternion.Euler(0.0f, currentYaw_, 0.0f) * frontDir_;
 
         // 落下が速いほど下を見る。床に着く（speed_ が 0 になる）と目標が 0 になり、Lerp でプレイヤーの中心へ戻る
         float targetLookDown = 0.0f;
@@ -124,14 +136,21 @@ public class CameraMove : MonoBehaviour
             return;
         }
 
-        currentDir_ = GetTargetDir();
-        fromDir_ = currentDir_;
-        toDir_ = currentDir_;
-        elapsed_ = k_switchTime;
+        SnapToTarget();
         lookDown_ = 0.0f;
 
         PlaceCamera();
         RotateBackground();
+    }
+
+    // 補間せず、目標の角度にそろえる
+    void SnapToTarget()
+    {
+        currentYaw_ = GetTargetYaw();
+        fromYaw_ = currentYaw_;
+        toYaw_ = currentYaw_;
+        elapsed_ = k_switchTime;
+        currentDir_ = Quaternion.Euler(0.0f, currentYaw_, 0.0f) * frontDir_;
     }
 
     // 背景を、カメラが正面から回り込んだ角度と同じだけ回す（ステージの中心＝X=0, Z=0 の縦軸まわり）
@@ -142,22 +161,20 @@ public class CameraMove : MonoBehaviour
             return;
         }
 
-        float yaw = Vector3.SignedAngle(frontDir_, currentDir_, Vector3.up);
-        Quaternion turn = Quaternion.Euler(0.0f, yaw, 0.0f);
+        Quaternion turn = Quaternion.Euler(0.0f, currentYaw_, 0.0f);
         Vector3 pivot = new Vector3(0.0f, backgroundBasePos_.y, 0.0f);
 
         backgroundObj_.transform.position = pivot + turn * (backgroundBasePos_ - pivot);
         backgroundObj_.transform.rotation = turn * backgroundBaseRot_;
     }
 
-    // 移動モードに応じたカメラの方向
-    Vector3 GetTargetDir()
+    // 移動モードに応じたカメラの角度（切り替えるたびに左へ回る）
+    float GetTargetYaw()
     {
-        // 左モードでは、正面から見て左側（プレイヤーの右側）から見る
-        if (playerMove_ != null && playerMove_.CurrentMoveMode == PlayerMove.MoveMode.Left)
+        if (playerMove_ != null)
         {
-            return playerObj_.transform.right;
+            return playerMove_.CameraYaw;
         }
-        return playerObj_.transform.forward;
+        return 0.0f;
     }
 }
