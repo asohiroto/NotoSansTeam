@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     public Vector3 jumpSpeed_ = Vector3.zero;
     // 床の上にいるか
     public bool isGround_ = false;
+    // 落下速度の最大値（1回の物理更新あたり。負の値）
+    public float MaxFallSpeed { get { return kPlayerMinSpeed_.y; } }
 
     enum PlayerState
     {

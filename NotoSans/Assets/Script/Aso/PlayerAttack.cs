@@ -5,6 +5,8 @@ public class PlayerAttack : MonoBehaviour
 {
     // ジャンプ時の上向き加速度
     [SerializeField] private Vector3 k_JumpAccel = new Vector3(0.0f, 0.0f, 0.0f);
+    // 発射（弾の生成）を有効にするか。今は×ボタンをアピールに使うため無効
+    [SerializeField] private bool k_EnableAttack = false;
 
     [SerializeField] private GameObject playerObj_;
     [SerializeField] private GameObject bulletPrefab_;
@@ -26,6 +28,12 @@ public class PlayerAttack : MonoBehaviour
     {
         // プレイヤーが存在しない、または倒されて隠れている（リスポーン待ち）なら何もしない
         if (player_ == null || !player_.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        // 発射が無効なら、弾を出さない
+        if (!k_EnableAttack)
         {
             return;
         }
