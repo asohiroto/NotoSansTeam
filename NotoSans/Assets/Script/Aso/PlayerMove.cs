@@ -29,15 +29,11 @@ public class PlayerMove : MonoBehaviour
     // 現在の移動モード（カメラなど外部から参照する用）
     public MoveMode CurrentMoveMode { get { return moveMode_; } }
 
-    // 1回の切り替え（左へ90度）のうち、ステージを回して見せる割合（残りはカメラが回り込む）
-    [SerializeField, Range(0.0f, 1.0f)] private float k_StageTurnRatio = 0.5f;
-    // 今までに切り替えた回数（角度を 270度→0度 と戻さず、回り続けるために数える）
+    // 今までに切り替えた回数（角度を 270度→0度 と戻さず、左へ回り続けるために数える）
     private int turnCount_ = 0;
 
-    // カメラが正面から回り込む角度（左回り）
-    public float CameraYaw { get { return 90.0f * turnCount_ * (1.0f - k_StageTurnRatio); } }
-    // ステージを回す角度（カメラと逆向きに回して、残りの角度を見せる）
-    public float StageYaw { get { return -90.0f * turnCount_ * k_StageTurnRatio; } }
+    // カメラが正面から回り込む角度（左回り。切り替えるたびに90度ずつ増える）
+    public float CameraYaw { get { return 90.0f * turnCount_; } }
 
     // カメラを置く方向（プレイヤーから見た向き）。正面の向きを CameraYaw だけ回したもの
     public Vector3 ViewDirection
@@ -103,17 +99,14 @@ public class PlayerMove : MonoBehaviour
 
     void ChangeMoveMode(MoveMode next)
     {
-        Quaternion oldStage = Quaternion.Euler(0.0f, StageYaw, 0.0f);
         moveMode_ = next;
         turnCount_++;
-        Quaternion newStage = Quaternion.Euler(0.0f, StageYaw, 0.0f);
 
-        // ステージから見た位置で、奥行き方向（ステージから見たカメラの向き）の位置を0にし、
-        // 回し終わったステージの上の位置に置く
-        Vector3 local = Quaternion.Inverse(oldStage) * player_.transform.position;
-        Vector3 depthAxis = Quaternion.Inverse(newStage) * ViewDirection;
-        local -= depthAxis * Vector3.Dot(local, depthAxis);
-        player_.transform.position = newStage * local;
+        // 奥行き方向（カメラの向きの軸）の位置を0にする（正面・後ろならZ、左・右ならX）
+        Vector3 pos = player_.transform.position;
+        Vector3 depthAxis = ViewDirection;
+        pos -= depthAxis * Vector3.Dot(pos, depthAxis);
+        player_.transform.position = pos;
 
         // 切り替えのエフェクト（プレイヤーについていく）
         EffectManager.PlayModeSwitch(player_.transform);
