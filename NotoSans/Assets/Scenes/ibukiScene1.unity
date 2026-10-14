@@ -1594,7 +1594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.0191023
+      value: 1.992655
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1606,7 +1606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.1405
+      value: 5.1538
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1921,7 +1921,6 @@ MonoBehaviour:
   player_: {fileID: 1419005112}
   playerMove_: {fileID: 1590538854}
   cameraMove_: {fileID: 1648468149}
-  stageRotate_: {fileID: 0}
 --- !u!4 &386235043
 Transform:
   m_ObjectHideFlags: 0
@@ -4837,7 +4836,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.38472
+      value: 4.218977
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalScale.y
@@ -4849,7 +4848,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.65
+      value: 2.567
       objectReference: {fileID: 0}
     - target: {fileID: 5400582919496687848, guid: 0d767f1382642dc4fae55a16d6b8007f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6792,7 +6791,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   k_LRMoveSpeed: {x: -0.1, y: 0, z: 0}
   playerObj_: {fileID: 1419005111}
-  k_StageTurnRatio: 0.5
 --- !u!114 &1590538855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6933,10 +6931,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraMove
   k_distance: 10
   k_switchTime: 0.5
+  k_BackgroundSwitchTime: 0.25
   k_PlayerCenterHeight: 0.5
   k_LookDownPerSpeed: 10
   k_MaxLookDown: 3
   k_LookDownLerpRate: 4
+  k_FastFallExtraLookDown: 1.5
   cameraObj_: {fileID: 194510929}
   playerObj_: {fileID: 1419005111}
   playerMove_: {fileID: 1590538854}
