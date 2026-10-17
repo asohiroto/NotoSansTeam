@@ -21,6 +21,7 @@ public class StageCard : MonoBehaviour
     [SerializeField] private TMP_Text rateText_;
 
     public string SceneName { get { return k_SceneName; } }
+    public string StageName { get { return k_StageName; } }
 
     void Start()
     {

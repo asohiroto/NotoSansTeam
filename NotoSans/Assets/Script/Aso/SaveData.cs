@@ -75,6 +75,15 @@ public static class SaveData
         Save();
     }
 
+    // そのステージの死亡数とクリア数を消す（0に戻る）
+    public static void DeleteStage(string stage)
+    {
+        // まだ読み込んでいなければ、先に読み込む（Find が読み込む）
+        Find(stage, false);
+        file_.stages.RemoveAll(record => record.stage == stage);
+        Save();
+    }
+
     private static StageRecord Find(string stage, bool create)
     {
         if (file_ == null)
