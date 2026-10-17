@@ -50,6 +50,8 @@ public class StageManager : MonoBehaviour
     void Awake()
     {
         instance_ = this;
+        // 前のシーンのクリア演出の目印を戻す
+        StageClearItem.Cleared = false;
     }
 
     void OnDestroy()
@@ -90,7 +92,8 @@ public class StageManager : MonoBehaviour
     public static void OnPlayerDied()
     {
         StageManager self = Instance;
-        if (self == null || self.resetting_)
+        // クリアしたあとの演出中に倒されても、死亡として数えず、リセットもしない
+        if (self == null || self.resetting_ || StageClearItem.Cleared)
         {
             return;
         }
