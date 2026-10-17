@@ -25,6 +25,10 @@ public static class SaveData
     private class SaveFile
     {
         public List<StageRecord> stages = new List<StageRecord>();
+        // 一度でもクリアシーンに行ったか（エクストラステージのボタンを出す条件）
+        public bool clearSceneSeen;
+        // エクストラステージを解放したか。一度解放したら、スコアを削除しても閉じない
+        public bool extraUnlocked;
     }
 
     // データフォルダの中のセーブ用フォルダ名・ファイル名
@@ -77,6 +81,54 @@ public static class SaveData
         record.clears++;
         record.cleared = true;
         Save();
+    }
+
+    // 一度でもクリアシーンに行ったか
+    public static bool ClearSceneSeen
+    {
+        get
+        {
+            if (file_ == null) { Load(); }
+            return file_.clearSceneSeen;
+        }
+    }
+
+    public static void MarkClearSceneSeen()
+    {
+        if (ClearSceneSeen)
+        {
+            return;
+        }
+        file_.clearSceneSeen = true;
+        Save();
+    }
+
+    // エクストラステージを解放したか
+    public static bool ExtraUnlocked
+    {
+        get
+        {
+            if (file_ == null) { Load(); }
+            return file_.extraUnlocked;
+        }
+    }
+
+    public static void UnlockExtra()
+    {
+        if (ExtraUnlocked)
+        {
+            return;
+        }
+        file_.extraUnlocked = true;
+        Save();
+    }
+
+    // そのステージのクリア率が percent（%）以上か。まだ1回も遊んでいなければ false
+    public static bool ClearRateAtLeast(string stage, int percent)
+    {
+        int clears = GetClears(stage);
+        int total = clears + GetDeaths(stage);
+        return total > 0 && clears * 100 >= total * percent;
     }
 
     // 一度でもクリアしたか（スコアを削除しても変わらない）。クリア数が残っている古いセーブも、クリア済みとして扱う
