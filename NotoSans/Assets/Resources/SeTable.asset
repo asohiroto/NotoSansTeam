@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e1c436bb7d5834f9301b287bbf2421, type: 3}
+  m_Name: SeTable
+  m_EditorClassIdentifier: Assembly-CSharp::SeTable
+  bomb: {fileID: 8300000, guid: 94d2c81114c2cb6418c0f330ac5ea20a, type: 3}
+  roll: {fileID: 8300000, guid: 74dca7dbbafd9404bbc1692f02927694, type: 3}
+  revive: {fileID: 8300000, guid: 5f949d3e4777971418458f1981ff863e, type: 3}
+  clear: {fileID: 8300000, guid: bd0e21bae29b22f4a86fd611c6aeec34, type: 3}
+  volume: 1
