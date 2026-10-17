@@ -110,6 +110,7 @@ public class PlayerMove : MonoBehaviour
 
         // 切り替えのエフェクト（プレイヤーについていく）
         EffectManager.PlayModeSwitch(player_.transform);
+        SoundEffects.Play(SoundEffects.Se.Roll);
     }
 
     // ステージのリセット: 正面モードに戻す（エフェクトは出さない）

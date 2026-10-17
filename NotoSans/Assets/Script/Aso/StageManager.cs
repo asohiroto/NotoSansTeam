@@ -95,6 +95,7 @@ public class StageManager : MonoBehaviour
         }
         // 1回の死につき1つだけ数える（リセット中に重ねて呼ばれた分は上で弾いている）
         self.deathCount_++;
+        SoundEffects.Play(SoundEffects.Se.Bomb);
         self.StartCoroutine(self.ResetRoutine());
     }
 
@@ -124,6 +125,7 @@ public class StageManager : MonoBehaviour
                 cameraMove_.ResetView();
             }
             EffectManager.PlayRespawn(player_.transform.position);
+            SoundEffects.Play(SoundEffects.Se.Revive);
         }
 
         resetting_ = false;
