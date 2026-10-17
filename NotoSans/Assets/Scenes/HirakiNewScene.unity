@@ -4107,13 +4107,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17eb5cf60b3a9da4b8ddec88f17da0ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMove
-  k_distance: 7
+  k_distance: 9
   k_switchTime: 0.5
   k_PlayerCenterHeight: 0.5
   k_LookDownPerSpeed: 10
   k_MaxLookDown: 3
   k_LookDownLerpRate: 4
-  k_FastFallExtraLookDown: 0.5
+  k_FastFallExtraLookDown: 1
   cameraObj_: {fileID: 1590941053}
   playerObj_: {fileID: 35651777}
   playerMove_: {fileID: 71099907}
