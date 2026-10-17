@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -28,13 +29,25 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     [SerializeField] private float k_SelectedScale = 1.25f;
     // 大きさが変わる速さ
     [SerializeField] private float k_ScaleLerpRate = 14.0f;
+
+    // ボタンの画像（選んでいるものと、選んでいないもの）。どちらも入っているときは画像を入れ替える
+    [SerializeField] private Sprite k_NormalSprite;
+    [SerializeField] private Sprite k_SelectedSprite;
+    // 画像が無いときは、色の明るさで選んでいるかを見せる
     [SerializeField] private Color k_SelectedColor = Color.white;
     [SerializeField] private Color k_NormalColor = new Color(0.65f, 0.65f, 0.65f, 1.0f);
+    // ボタンの文字の色（選んでいるものと、選んでいないもの）
+    [SerializeField] private Color k_SelectedTextColor = new Color(0.25f, 0.15f, 0.0f, 1.0f);
+    [SerializeField] private Color k_NormalTextColor = Color.white;
 
     private int selected_ = 0;
 
     void Start()
     {
+        // 日本語のフォントにする
+        Canvas canvas = GetComponentInParent<Canvas>();
+        GameFonts.ApplyBody(canvas != null ? canvas.transform : transform);
+
         for (int i = 0; i < k_Buttons.Length; i++)
         {
             // マウスでも選べる・押せるようにしておく
@@ -121,9 +134,10 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
 #endif
     }
 
-    // 選んでいるボタンを大きく・明るくする
+    // 選んでいるボタンを大きく・目立たせる
     void Apply(bool immediate)
     {
+        bool useSprites = k_NormalSprite != null && k_SelectedSprite != null;
         for (int i = 0; i < k_Buttons.Length; i++)
         {
             bool on = i == selected_;
@@ -134,7 +148,22 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
             Image image = k_Buttons[i].GetComponent<Image>();
             if (image != null)
             {
-                image.color = on ? k_SelectedColor : k_NormalColor;
+                if (useSprites)
+                {
+                    image.sprite = on ? k_SelectedSprite : k_NormalSprite;
+                    image.type = Image.Type.Sliced;
+                    image.color = Color.white;
+                }
+                else
+                {
+                    image.color = on ? k_SelectedColor : k_NormalColor;
+                }
+            }
+
+            TMP_Text label = k_Buttons[i].GetComponentInChildren<TMP_Text>();
+            if (label != null)
+            {
+                label.color = on ? k_SelectedTextColor : k_NormalTextColor;
             }
         }
     }

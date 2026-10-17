@@ -48,6 +48,20 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         BuildDeleteButtons();
         BuildConfirmPopup();
 
+        // シーンに置いてある文字も、日本語のフォントにする（見出しとステージ名は見出し用）
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            GameFonts.ApplyBody(canvas.transform);
+            foreach (TMP_Text text in canvas.GetComponentsInChildren<TMP_Text>(true))
+            {
+                if (text.name == "Title Text" || text.name == "Name" || text.name == "ConfirmText")
+                {
+                    GameFonts.SetHeading(text);
+                }
+            }
+        }
+
         for (int i = 0; i < k_Cards.Length; i++)
         {
             // マウスでも選べる・押せるようにしておく
@@ -189,7 +203,7 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
     void OpenConfirm(int cardIndex)
     {
         deleteTarget_ = cardIndex;
-        confirmText_.text = "DELETE " + k_Cards[cardIndex].StageName + " SCORE?";
+        confirmText_.text = k_Cards[cardIndex].StageName + "のスコアを削除しますか？";
         confirmSelected_ = 1;
         confirming_ = true;
         confirmPanel_.SetActive(true);
@@ -255,7 +269,7 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         for (int i = 0; i < k_Cards.Length; i++)
         {
             // ステージのボタンの子にするので、ステージのボタンと一緒に大きくなる
-            RectTransform button = CreateButton("DeleteButton", k_Cards[i].transform, "DELETE SCORE", 32, new Vector2(0.0f, -372.0f), new Vector2(320.0f, 56.0f), Color.white);
+            RectTransform button = CreateButton("DeleteButton", k_Cards[i].transform, "スコア削除", 32, new Vector2(0.0f, -352.0f), new Vector2(320.0f, 56.0f), Color.white);
             MenuButtonPointer pointer = button.gameObject.AddComponent<MenuButtonPointer>();
             pointer.Init(this, k_Cards.Length + i);
             deleteButtons_[i] = button;
@@ -278,15 +292,16 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         Image window = CreateImage("Window", confirmPanel_.transform, new Color(0.12f, 0.16f, 0.3f, 1.0f));
         window.rectTransform.sizeDelta = new Vector2(1000.0f, 460.0f);
 
-        confirmText_ = CreateText("ConfirmText", window.transform, "DELETE SCORE?", 70, Color.white);
+        confirmText_ = CreateText("ConfirmText", window.transform, "スコアを削除しますか？", 52, Color.white);
+        GameFonts.SetHeading(confirmText_);
         confirmText_.rectTransform.anchoredPosition = new Vector2(0.0f, 110.0f);
         confirmText_.rectTransform.sizeDelta = new Vector2(940.0f, 110.0f);
-        TMP_Text note = CreateText("ConfirmNote", window.transform, "DEATHS and CLEARS will be erased.", 40, new Color(1.0f, 1.0f, 1.0f, 0.8f));
+        TMP_Text note = CreateText("ConfirmNote", window.transform, "死亡数とクリア数が消えます。", 40, new Color(1.0f, 1.0f, 1.0f, 0.8f));
         note.rectTransform.anchoredPosition = new Vector2(0.0f, 30.0f);
         note.rectTransform.sizeDelta = new Vector2(940.0f, 70.0f);
 
         confirmButtons_ = new RectTransform[2];
-        string[] labels = { "YES", "NO" };
+        string[] labels = { "はい", "いいえ" };
         for (int i = 0; i < confirmButtons_.Length; i++)
         {
             RectTransform button = CreateButton("ConfirmButton" + i, window.transform, labels[i], 54, new Vector2(-210.0f + 420.0f * i, -110.0f), new Vector2(360.0f, 100.0f), new Color(0.1f, 0.12f, 0.2f, 1.0f));
@@ -326,8 +341,12 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         obj.transform.SetParent(parent, false);
         TextMeshProUGUI text = obj.AddComponent<TextMeshProUGUI>();
         text.text = value;
+        // 日本語のフォント（太字は、このフォント自体が太いので使わない）
+        if (GameFonts.Body != null)
+        {
+            text.font = GameFonts.Body;
+        }
         text.fontSize = fontSize;
-        text.fontStyle = FontStyles.Bold;
         text.color = color;
         text.alignment = TextAlignmentOptions.Center;
         text.textWrappingMode = TextWrappingModes.NoWrap;
