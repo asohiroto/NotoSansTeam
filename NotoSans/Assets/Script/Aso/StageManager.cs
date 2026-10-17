@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // ステージのリセットとプレイヤーのリスポーンをまとめるクラス（シーンに1つ置く）
 public class StageManager : MonoBehaviour
@@ -95,6 +96,8 @@ public class StageManager : MonoBehaviour
         }
         // 1回の死につき1つだけ数える（リセット中に重ねて呼ばれた分は上で弾いている）
         self.deathCount_++;
+        // ステージごとの累計死亡数をセーブする（モード選択で表示する）
+        SaveData.AddDeath(SceneManager.GetActiveScene().name);
         SoundEffects.Play(SoundEffects.Se.Bomb);
         self.StartCoroutine(self.ResetRoutine());
     }

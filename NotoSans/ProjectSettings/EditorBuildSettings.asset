@@ -9,14 +9,20 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: 5b47a02b1112c9a4785599bed749c122
+  - enabled: 1
+    path: Assets/Scenes/ModeSelectScene.unity
+    guid: 706563067733b7b428c32f64dc993d34
+  - enabled: 0
     path: Assets/Scenes/RyoScene.unity
     guid: 8c3a642e473e549498e36729279eda43
   - enabled: 1
+    path: Assets/Scenes/kiraScene.unity
+    guid: 207cd467832186a4eafb187a3e138a9d
+  - enabled: 1
     path: Assets/Scenes/RyoStage3Scene.unity
     guid: 74a237af72b2b314aabe8cf01dce6889
-  - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
-    guid: 5b47a02b1112c9a4785599bed749c122
   - enabled: 1
     path: Assets/Scenes/ibukiScene1.unity
     guid: 77f58736196a96f4cbff7fe013292e6d
@@ -27,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameOverScene.unity
     guid: 65ddd3c3a82918d4494058beeb5ffb6a
   - enabled: 1
-    path: Assets/Scenes/ModeSelectScene.unity
-    guid: 706563067733b7b428c32f64dc993d34
+    path: Assets/Scenes/RyoStage3SceneNew.unity
+    guid: cf2d7097d01070a498b9a29340ce2aa0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b63883c9ba185ac41833015f5ebaf2ca, type: 3}
