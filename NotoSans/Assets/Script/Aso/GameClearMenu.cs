@@ -143,20 +143,27 @@ public class GameClearMenu : MonoBehaviour, IMenuSelector
         canvasObj.AddComponent<GraphicRaycaster>();
         Transform root = canvasObj.transform;
 
-        TMP_Text title = CreateText(root, "ゲームクリア！", 140, new Vector2(0.0f, 300.0f), new Vector2(1600.0f, 200.0f), Color.white);
-        GameFonts.SetHeading(title);
+        // シーンに3Dのロゴ（ClearLogo）があれば、それを見出しにする。無いときだけ、文字の見出しを出す
+        bool hasLogo = GameObject.Find("ClearLogo") != null;
+        if (!hasLogo)
+        {
+            TMP_Text title = CreateText(root, "ゲームクリア！", 140, new Vector2(0.0f, 300.0f), new Vector2(1600.0f, 200.0f), Color.white);
+            GameFonts.SetHeading(title);
+        }
 
         if (firstVisit)
         {
-            TMP_Text note = CreateText(root, "エクストラステージのボタンが ステージ選択に出現した！", 46, new Vector2(0.0f, 160.0f), new Vector2(1600.0f, 80.0f), new Color(1.0f, 0.9f, 0.4f, 1.0f));
+            TMP_Text note = CreateText(root, "エクストラステージのボタンが ステージ選択に出現した！", 46, new Vector2(0.0f, hasLogo ? -40.0f : 160.0f), new Vector2(1600.0f, 80.0f), new Color(1.0f, 0.9f, 0.4f, 1.0f));
             note.name = "ExtraNote";
         }
 
         buttons_ = new RectTransform[2];
         string[] labels = { "タイトルへ戻る", "ステージ選択へ" };
+        float firstY = hasLogo ? -150.0f : -20.0f;
+        float spacing = hasLogo ? 140.0f : 150.0f;
         for (int i = 0; i < buttons_.Length; i++)
         {
-            buttons_[i] = CreateButton(root, labels[i], new Vector2(0.0f, -20.0f - 150.0f * i), i);
+            buttons_[i] = CreateButton(root, labels[i], new Vector2(0.0f, firstY - spacing * i), i);
         }
     }
 
