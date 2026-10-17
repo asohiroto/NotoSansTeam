@@ -992,7 +992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageCard
   k_StageName: STAGE 2
   k_StageImage: {fileID: 0}
-  k_SceneName: RyoStage3SceneNew
+  k_SceneName: HirakiNewScene
   nameText_: {fileID: 1444263277}
   image_: {fileID: 1911320030}
   noImageText_: {fileID: 800248612}
