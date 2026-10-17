@@ -1,22 +1,26 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// ステージクリア用アイテム。プレイヤーが触れるとクリアSEを鳴らして、選んだシーンへ遷移する
-// 遷移先は Inspector の「遷移先シーン」で選ぶ（遷移先は Build Settings のシーン一覧に入れておくこと）
+// ステージクリアの判定オブジェクト（光のゲート）。プレイヤーが触れると、クリアSEを鳴らして次へ進む。
+// 遷移先は、Inspector の「遷移先シーン」で選べる。空のままなら、StageProgress の並びの次のステージへ進む
+// （次が無ければステージ選択へ戻る）。遷移先は Build Settings のシーン一覧に入れておくこと
 public class StageClearItem : MonoBehaviour
 {
 #if UNITY_EDITOR
-    // 遷移先のシーン（エディター上で選ぶ用。実際の遷移には下の名前を使う）
+    // 遷移先のシーン（エディター上で選ぶ用。空なら自動で次のステージ）
     [SerializeField] private UnityEditor.SceneAsset k_NextScene;
 #endif
     // 遷移先のシーン名（遷移先シーンを選ぶと自動で入る。ビルドではこちらを使う）
     [SerializeField, HideInInspector] private string nextSceneName_;
 
-    // 見た目：ゆっくり回す速さ（度/秒）
+    // 見た目：ゆっくり回す速さ（度/秒）。0なら回さない（光のゲートは回さない）
     [SerializeField] private float k_SpinSpeed = 90.0f;
 
     // 二重に遷移しないための印
     private bool cleared_ = false;
+
+    // クリアしたあとの演出中か（演出中に倒されても、死亡として数えないための目印）
+    public static bool Cleared { get; set; }
 
 #if UNITY_EDITOR
     void OnValidate()
@@ -27,7 +31,10 @@ public class StageClearItem : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(0.0f, k_SpinSpeed * Time.deltaTime, 0.0f, Space.World);
+        if (k_SpinSpeed != 0.0f)
+        {
+            transform.Rotate(0.0f, k_SpinSpeed * Time.deltaTime, 0.0f, Space.World);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -38,22 +45,21 @@ public class StageClearItem : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrEmpty(nextSceneName_))
+        string current = SceneManager.GetActiveScene().name;
+        string next = string.IsNullOrEmpty(nextSceneName_) ? StageProgress.GetNextScene(current) : nextSceneName_;
+        if (!Application.CanStreamedLevelBeLoaded(next))
         {
-            Debug.LogWarning("StageClearItem: 遷移先シーンが選ばれていません", this);
-            return;
-        }
-        if (!Application.CanStreamedLevelBeLoaded(nextSceneName_))
-        {
-            Debug.LogWarning("StageClearItem: シーン「" + nextSceneName_ + "」が Build Settings に入っていません", this);
+            Debug.LogWarning("StageClearItem: シーン「" + next + "」が Build Settings に入っていません", this);
             return;
         }
 
         cleared_ = true;
-        // ステージごとの累計クリア数をセーブする（モード選択で表示する）
-        SaveData.AddClear(SceneManager.GetActiveScene().name);
+        Cleared = true;
+        // ステージごとの累計クリア数をセーブする（モード選択で表示・次のステージの解放に使う）
+        SaveData.AddClear(current);
         // 音源はシーンをまたいで残るので、遷移しても最後まで鳴る
         SoundEffects.Play(SoundEffects.Se.Clear);
-        SceneManager.LoadScene(nextSceneName_);
+        // 上からUnityちゃんが降ってくる演出つきで、次へ進む
+        SceneTransition.Go(next);
     }
 }

@@ -17,6 +17,8 @@ public static class SaveData
         public int deaths;
         // 累計クリア数
         public int clears;
+        // 一度でもクリアしたか。スコアを削除しても消さない（次のステージの解放に使う）
+        public bool cleared;
     }
 
     [Serializable]
@@ -71,16 +73,36 @@ public static class SaveData
 
     public static void AddClear(string stage)
     {
-        Find(stage, true).clears++;
+        StageRecord record = Find(stage, true);
+        record.clears++;
+        record.cleared = true;
         Save();
     }
 
-    // そのステージの死亡数とクリア数を消す（0に戻る）
+    // 一度でもクリアしたか（スコアを削除しても変わらない）。クリア数が残っている古いセーブも、クリア済みとして扱う
+    public static bool IsCleared(string stage)
+    {
+        StageRecord record = Find(stage, false);
+        return record != null && (record.cleared || record.clears > 0);
+    }
+
+    // そのステージの死亡数とクリア数を消す（0に戻る）。「一度クリアした」記録だけは残す（解放したステージは閉じない）
     public static void DeleteStage(string stage)
     {
-        // まだ読み込んでいなければ、先に読み込む（Find が読み込む）
-        Find(stage, false);
-        file_.stages.RemoveAll(record => record.stage == stage);
+        StageRecord record = Find(stage, false);
+        if (record == null)
+        {
+            return;
+        }
+        bool cleared = record.cleared || record.clears > 0;
+        file_.stages.Remove(record);
+        if (cleared)
+        {
+            StageRecord kept = new StageRecord();
+            kept.stage = stage;
+            kept.cleared = true;
+            file_.stages.Add(kept);
+        }
         Save();
     }
 

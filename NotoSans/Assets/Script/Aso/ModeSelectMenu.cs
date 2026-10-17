@@ -69,7 +69,45 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             pointer.Init(this, i);
             k_Cards[i].Refresh();
         }
+        RefreshLocks();
         Apply(true);
+    }
+
+    // 解放の状態を見て、ロック中のステージを暗くする（スコアを削除しても、一度クリアした記録は残る）
+    void RefreshLocks()
+    {
+        for (int i = 0; i < k_Cards.Length; i++)
+        {
+            bool locked = !StageProgress.IsUnlocked(k_Cards[i].SceneName);
+            k_Cards[i].SetLocked(locked, locked ? UnlockCondition(k_Cards[i].SceneName) : string.Empty);
+            // ロック中のステージのスコアは、削除できない（まだ何もないため）
+            deleteButtons_[i].gameObject.SetActive(!locked);
+        }
+        if (k_Cards.Length > 0 && k_Cards[selected_].IsLocked)
+        {
+            row_ = 0;
+        }
+    }
+
+    // 「ステージ1とステージ2をクリアすると解放」のような、解放の条件の文
+    string UnlockCondition(string scene)
+    {
+        string names = string.Empty;
+        int index = System.Array.IndexOf(StageProgress.Stages, scene);
+        for (int i = 0; i < index; i++)
+        {
+            string required = StageProgress.Stages[i];
+            string display = required;
+            foreach (StageCard card in k_Cards)
+            {
+                if (card.SceneName == required)
+                {
+                    display = card.StageName;
+                }
+            }
+            names += (names.Length > 0 ? "と" : string.Empty) + display;
+        }
+        return names + "をクリアすると解放";
     }
 
     void Update()
@@ -133,9 +171,14 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             {
                 row_ = 0;
             }
-            else if (moveY > 0)
+            else if (moveY > 0 && k_Cards.Length > 0 && !k_Cards[selected_].IsLocked)
             {
                 row_ = 1;
+            }
+            // ロック中のステージに移ったときは、スコア削除ボタンから外す
+            if (k_Cards.Length > 0 && k_Cards[selected_].IsLocked)
+            {
+                row_ = 0;
             }
 
             if (submit)
@@ -195,6 +238,11 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         }
         else if (index >= 0)
         {
+            // まだ解放されていないステージには行けない
+            if (k_Cards[index].IsLocked)
+            {
+                return;
+            }
             SceneTransition.Go(k_Cards[index].SceneName);
         }
     }
@@ -296,7 +344,7 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         GameFonts.SetHeading(confirmText_);
         confirmText_.rectTransform.anchoredPosition = new Vector2(0.0f, 110.0f);
         confirmText_.rectTransform.sizeDelta = new Vector2(940.0f, 110.0f);
-        TMP_Text note = CreateText("ConfirmNote", window.transform, "死亡数とクリア数が消えます。", 40, new Color(1.0f, 1.0f, 1.0f, 0.8f));
+        TMP_Text note = CreateText("ConfirmNote", window.transform, "死亡数とクリア数が消えます（解放は残ります）", 38, new Color(1.0f, 1.0f, 1.0f, 0.8f));
         note.rectTransform.anchoredPosition = new Vector2(0.0f, 30.0f);
         note.rectTransform.sizeDelta = new Vector2(940.0f, 70.0f);
 
