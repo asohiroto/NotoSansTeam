@@ -38,6 +38,12 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
+        // ポーズ中、およびポーズを解除したフレームは撃たない（解除の決定ボタンで弾が出ないように）
+        if (GameHud.IsPaused || Time.frameCount <= GameHud.LastChangeFrame)
+        {
+            return;
+        }
+
         if (playerJump_.WasPressedThisFrame())
         {
             if (player_.remainAmmunition_ >= 1)
