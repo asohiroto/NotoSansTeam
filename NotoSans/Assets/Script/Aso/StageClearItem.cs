@@ -57,6 +57,11 @@ public class StageClearItem : MonoBehaviour
         Cleared = true;
         // ステージごとの累計クリア数をセーブする（モード選択で表示・次のステージの解放に使う）
         SaveData.AddClear(current);
+        // クリアシーンへ行くなら、「行ったことがある」を記録する（エクストラステージのボタンが出る）
+        if (next == StageProgress.ClearScene)
+        {
+            SaveData.MarkClearSceneSeen();
+        }
         // 音源はシーンをまたいで残るので、遷移しても最後まで鳴る
         SoundEffects.Play(SoundEffects.Se.Clear);
         // 上からUnityちゃんが降ってくる演出つきで、次へ進む

@@ -35,6 +35,11 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
 
     private RectTransform[] deleteButtons_;
 
+    // ステージのボタンを並べる間隔
+    private const float k_CardSpacing = 600.0f;
+    // 隠れているステージ（エクストラが、まだ出ていないとき）
+    private bool[] hidden_ = new bool[0];
+
     // 確認ポップアップ
     private bool confirming_ = false;
     private int confirmSelected_ = 1;
@@ -73,15 +78,45 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         Apply(true);
     }
 
-    // 解放の状態を見て、ロック中のステージを暗くする（スコアを削除しても、一度クリアした記録は残る）
+    // 隠すステージ（エクストラは、一度クリアシーンに行くまで隠す）と、ロック中のステージを決める。
+    // 一度クリアした・解放した記録は、スコアを削除しても残る
     void RefreshLocks()
     {
+        hidden_ = new bool[k_Cards.Length];
+        int visibleCount = 0;
         for (int i = 0; i < k_Cards.Length; i++)
         {
+            hidden_[i] = !StageProgress.IsVisible(k_Cards[i].SceneName);
+            k_Cards[i].gameObject.SetActive(!hidden_[i]);
+            if (hidden_[i])
+            {
+                continue;
+            }
+            visibleCount++;
+
             bool locked = !StageProgress.IsUnlocked(k_Cards[i].SceneName);
             k_Cards[i].SetLocked(locked, locked ? UnlockCondition(k_Cards[i].SceneName) : string.Empty);
             // ロック中のステージのスコアは、削除できない（まだ何もないため）
             deleteButtons_[i].gameObject.SetActive(!locked);
+        }
+
+        // 出ているボタンだけを、画面の中央に等間隔で並べ直す
+        int order = 0;
+        for (int i = 0; i < k_Cards.Length; i++)
+        {
+            if (hidden_[i])
+            {
+                continue;
+            }
+            RectTransform rect = (RectTransform)k_Cards[i].transform;
+            rect.anchoredPosition = new Vector2((order - (visibleCount - 1) * 0.5f) * k_CardSpacing, rect.anchoredPosition.y);
+            order++;
+        }
+
+        // 隠れているステージを選んだままにしない
+        if (k_Cards.Length > 0 && hidden_[selected_])
+        {
+            selected_ = NextVisible(selected_, 1);
         }
         if (k_Cards.Length > 0 && k_Cards[selected_].IsLocked)
         {
@@ -89,25 +124,56 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         }
     }
 
-    // 「ステージ1とステージ2をクリアすると解放」のような、解放の条件の文
+    // from から direction（1＝右、-1＝左）の向きに、出ている次のステージを探す
+    int NextVisible(int from, int direction)
+    {
+        int index = from;
+        for (int n = 0; n < k_Cards.Length; n++)
+        {
+            index = (index + direction + k_Cards.Length) % k_Cards.Length;
+            if (!hidden_[index])
+            {
+                return index;
+            }
+        }
+        return from;
+    }
+
+    // ロック中に見せる解放の条件の文
     string UnlockCondition(string scene)
     {
+        if (scene == StageProgress.ExtraStage)
+        {
+            // エクストラ：通常のステージすべてのクリア率が 70% 以上
+            string stages = string.Empty;
+            foreach (string stage in StageProgress.Stages)
+            {
+                stages += (stages.Length > 0 ? "と" : string.Empty) + DisplayName(stage);
+            }
+            return stages + "のクリア率が" + (StageProgress.Stages.Length > 1 ? "どちらも" : string.Empty) + StageProgress.ExtraClearRatePercent + "%以上で解放";
+        }
+
+        // 通常のステージ：前のステージをクリア
         string names = string.Empty;
         int index = System.Array.IndexOf(StageProgress.Stages, scene);
         for (int i = 0; i < index; i++)
         {
-            string required = StageProgress.Stages[i];
-            string display = required;
-            foreach (StageCard card in k_Cards)
-            {
-                if (card.SceneName == required)
-                {
-                    display = card.StageName;
-                }
-            }
-            names += (names.Length > 0 ? "と" : string.Empty) + display;
+            names += (names.Length > 0 ? "と" : string.Empty) + DisplayName(StageProgress.Stages[i]);
         }
         return names + "をクリアすると解放";
+    }
+
+    // シーン名から、ボタンに付いているステージ名を探す
+    string DisplayName(string scene)
+    {
+        foreach (StageCard card in k_Cards)
+        {
+            if (card.SceneName == scene)
+            {
+                return card.StageName;
+            }
+        }
+        return scene;
     }
 
     void Update()
@@ -165,7 +231,8 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         {
             if (moveX != 0 && k_Cards.Length > 0)
             {
-                selected_ = (selected_ + moveX + k_Cards.Length) % k_Cards.Length;
+                // 隠れているステージは飛ばす
+                selected_ = NextVisible(selected_, moveX);
             }
             if (moveY < 0)
             {

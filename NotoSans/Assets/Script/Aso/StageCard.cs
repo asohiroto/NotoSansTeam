@@ -113,7 +113,7 @@ public class StageCard : MonoBehaviour
 
         TMP_Text title = CreateText(overlay.transform, "ロック中", 72, new Vector2(0.0f, 40.0f), new Vector2(460.0f, 100.0f));
         GameFonts.SetHeading(title);
-        lockConditionText_ = CreateText(overlay.transform, "", 34, new Vector2(0.0f, -70.0f), new Vector2(440.0f, 130.0f));
+        lockConditionText_ = CreateText(overlay.transform, "", 34, new Vector2(0.0f, -85.0f), new Vector2(440.0f, 180.0f));
         lockConditionText_.textWrappingMode = TextWrappingModes.Normal;
         lockOverlay_ = overlay;
     }
