@@ -4,10 +4,8 @@ public class CameraMove : MonoBehaviour
 {
     // カメラのプレイヤーまでの距離
     [SerializeField] private float k_distance = 5.0f;
-    // モード切り替え時にカメラが回り込むまでの時間（秒）
+    // モード切り替え時にカメラと背景（壁）が回り込むまでの時間（秒）。両方とも同じ値
     [SerializeField] private float k_switchTime = 0.5f;
-    // モード切り替え時に背景（壁）が回り終わるまでの時間（秒）。カメラ（k_switchTime）より短くして、先に回し終える
-    [SerializeField] private float k_BackgroundSwitchTime = 0.25f;
     // カメラがとらえるプレイヤーの中心の高さ（足元からの高さ）
     [SerializeField] private float k_PlayerCenterHeight = 0.5f;
     // 落下中に下を見る量: 落下速度（Player.speed_.y、1回の物理更新あたり）× この値
@@ -114,9 +112,9 @@ public class CameraMove : MonoBehaviour
         currentYaw_ = Mathf.Lerp(fromYaw_, toYaw_, t);
         currentDir_ = Quaternion.Euler(0.0f, currentYaw_, 0.0f) * frontDir_;
 
-        // 背景はカメラより短い時間で同じ角度まで回す
+        // 背景もカメラと同じ時間で同じ角度まで回す
         backgroundElapsed_ += Time.fixedDeltaTime;
-        float backgroundT = Mathf.Clamp01(backgroundElapsed_ / k_BackgroundSwitchTime);
+        float backgroundT = Mathf.Clamp01(backgroundElapsed_ / k_switchTime);
         backgroundYaw_ = Mathf.Lerp(backgroundFromYaw_, toYaw_, backgroundT);
 
         // 落下が速いほど下を見る。床に着く（speed_ が 0 になる）と目標が 0 になり、Lerp でプレイヤーの中心へ戻る
@@ -169,7 +167,7 @@ public class CameraMove : MonoBehaviour
         elapsed_ = k_switchTime;
         backgroundYaw_ = currentYaw_;
         backgroundFromYaw_ = currentYaw_;
-        backgroundElapsed_ = k_BackgroundSwitchTime;
+        backgroundElapsed_ = k_switchTime;
         currentDir_ = Quaternion.Euler(0.0f, currentYaw_, 0.0f) * frontDir_;
     }
 
