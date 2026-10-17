@@ -123,14 +123,6 @@ public static class SaveData
         Save();
     }
 
-    // そのステージのクリア率が percent（%）以上か。まだ1回も遊んでいなければ false
-    public static bool ClearRateAtLeast(string stage, int percent)
-    {
-        int clears = GetClears(stage);
-        int total = clears + GetDeaths(stage);
-        return total > 0 && clears * 100 >= total * percent;
-    }
-
     // 一度でもクリアしたか（スコアを削除しても変わらない）。クリア数が残っている古いセーブも、クリア済みとして扱う
     public static bool IsCleared(string stage)
     {
