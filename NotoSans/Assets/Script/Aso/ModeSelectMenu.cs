@@ -144,13 +144,13 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
     {
         if (scene == StageProgress.ExtraStage)
         {
-            // エクストラ：通常のステージすべてのクリア率が 70% 以上
+            // エクストラ：通常のステージそれぞれを 3 回以上クリア
             string stages = string.Empty;
             foreach (string stage in StageProgress.Stages)
             {
                 stages += (stages.Length > 0 ? "と" : string.Empty) + DisplayName(stage);
             }
-            return stages + "のクリア率が" + (StageProgress.Stages.Length > 1 ? "どちらも" : string.Empty) + StageProgress.ExtraClearRatePercent + "%以上で解放";
+            return stages + "を" + (StageProgress.Stages.Length > 1 ? "どちらも" : string.Empty) + StageProgress.ExtraClearCount + "回以上クリアで解放";
         }
 
         // 通常のステージ：前のステージをクリア

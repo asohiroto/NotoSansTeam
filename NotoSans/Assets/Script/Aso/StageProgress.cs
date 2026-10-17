@@ -4,7 +4,7 @@ using System;
 //  ・ステージ1 → ステージ2 の順に進む。ステージ2をクリアすると、クリアシーンへ行く
 //  ・ステージ2は、ステージ1を一度クリアしていないと選べない
 //  ・エクストラステージのボタンは、一度でもクリアシーンに行くまで隠れている。
-//    出たあとも、ステージ1・2の両方のクリア率が 70% 以上になるまでは選べない
+//    出たあとも、ステージ1・2をそれぞれ 3 回以上クリアするまでは選べない
 //  ・「一度クリアした」「エクストラを解放した」記録は、スコアを削除しても残る
 // ステージのシーン名を変えたときは、モード選択のボタンの「遷移先シーン名」と、ここを同じにすること
 public static class StageProgress
@@ -21,8 +21,8 @@ public static class StageProgress
     // 次がないときに戻る先
     public const string StageSelectScene = "ModeSelectScene";
 
-    // エクストラの解放に必要な、通常ステージのクリア率（%）
-    public const int ExtraClearRatePercent = 70;
+    // エクストラの解放に必要な、通常ステージそれぞれのクリア回数
+    public const int ExtraClearCount = 3;
 
     // クリアしたあとに行くシーン。次のステージがあればそれ、最後ならクリアシーン、並びに無ければステージ選択
     public static string GetNextScene(string current)
@@ -61,7 +61,7 @@ public static class StageProgress
         return true;
     }
 
-    // エクストラを選べるか。通常のステージすべてのクリア率が 70% 以上になったら解放し、そのまま記録する
+    // エクストラを選べるか。通常のステージそれぞれを 3 回以上クリアしたら解放し、そのまま記録する
     public static bool IsExtraUnlocked()
     {
         if (SaveData.ExtraUnlocked)
@@ -70,7 +70,7 @@ public static class StageProgress
         }
         foreach (string stage in Stages)
         {
-            if (!SaveData.ClearRateAtLeast(stage, ExtraClearRatePercent))
+            if (SaveData.GetClears(stage) < ExtraClearCount)
             {
                 return false;
             }
