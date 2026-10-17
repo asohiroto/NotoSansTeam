@@ -245,7 +245,7 @@ public class GameHud : MonoBehaviour, IMenuSelector
         if (deaths != shownDeaths_)
         {
             shownDeaths_ = deaths;
-            deathText_.text = "DEATHS  " + deaths;
+            deathText_.text = "死亡数  " + deaths;
         }
     }
 
@@ -292,7 +292,7 @@ public class GameHud : MonoBehaviour, IMenuSelector
         Image deathBack = CreateImage("DeathBack", root, new Color(0.0f, 0.0f, 0.0f, 0.45f));
         SetRect(deathBack.rectTransform, new Vector2(0.0f, 1.0f), new Vector2(0.0f, 1.0f), new Vector2(30.0f, -30.0f), new Vector2(380.0f, 80.0f));
         deathBack.raycastTarget = false;
-        deathText_ = CreateText("DeathText", deathBack.transform, "DEATHS  0", 52, Color.white);
+        deathText_ = CreateText("DeathText", deathBack.transform, "死亡数  0", 48, Color.white);
         deathText_.rectTransform.anchorMin = Vector2.zero;
         deathText_.rectTransform.anchorMax = Vector2.one;
         deathText_.rectTransform.offsetMin = Vector2.zero;
@@ -302,12 +302,13 @@ public class GameHud : MonoBehaviour, IMenuSelector
         Image pauseBack = CreateImage("PausePanel", root, new Color(0.0f, 0.0f, 0.0f, 0.6f));
         Stretch(pauseBack.rectTransform);
         pausePanel_ = pauseBack.gameObject;
-        TMP_Text pauseTitle = CreateText("PauseTitle", pausePanel_.transform, "PAUSE", 120, Color.white);
+        TMP_Text pauseTitle = CreateText("PauseTitle", pausePanel_.transform, "ポーズ", 120, Color.white);
+        GameFonts.SetHeading(pauseTitle);
         SetRect(pauseTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.0f, 260.0f), new Vector2(1000.0f, 160.0f));
-        TMP_Text pauseHint = CreateText("PauseHint", pausePanel_.transform, "D-PAD : SELECT      A : OK      START / B : RESUME", 32, new Color(1.0f, 1.0f, 1.0f, 0.75f));
+        TMP_Text pauseHint = CreateText("PauseHint", pausePanel_.transform, "十字キー：選ぶ　　Aボタン：決定　　スタート／Bボタン：再開", 32, new Color(1.0f, 1.0f, 1.0f, 0.75f));
         SetRect(pauseHint.rectTransform, new Vector2(0.5f, 0.0f), new Vector2(0.5f, 0.0f), new Vector2(0.0f, 60.0f), new Vector2(1500.0f, 50.0f));
         pauseButtons_ = new RectTransform[3];
-        string[] pauseLabels = { "RESUME", "STAGE SELECT", "QUIT GAME" };
+        string[] pauseLabels = { "再開", "ステージ選択", "ゲーム終了" };
         for (int i = 0; i < pauseButtons_.Length; i++)
         {
             pauseButtons_[i] = CreateButton("PauseButton" + i, pausePanel_.transform, pauseLabels[i], new Vector2(0.0f, 80.0f - 130.0f * i), new Vector2(560.0f, 100.0f));
@@ -319,10 +320,11 @@ public class GameHud : MonoBehaviour, IMenuSelector
         confirmPanel_ = confirmBack.gameObject;
         Image window = CreateImage("Window", confirmPanel_.transform, new Color(0.12f, 0.16f, 0.3f, 1.0f));
         SetRect(window.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1000.0f, 460.0f));
-        TMP_Text confirmText = CreateText("ConfirmText", window.transform, "QUIT THE GAME?", 76, Color.white);
+        TMP_Text confirmText = CreateText("ConfirmText", window.transform, "ゲームを終了しますか？", 70, Color.white);
+        GameFonts.SetHeading(confirmText);
         SetRect(confirmText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.0f, 100.0f), new Vector2(940.0f, 130.0f));
         confirmButtons_ = new RectTransform[2];
-        string[] confirmLabels = { "YES", "NO" };
+        string[] confirmLabels = { "はい", "いいえ" };
         for (int i = 0; i < confirmButtons_.Length; i++)
         {
             confirmButtons_[i] = CreateButton("ConfirmButton" + i, window.transform, confirmLabels[i], new Vector2(-210.0f + 420.0f * i, -100.0f), new Vector2(360.0f, 100.0f));
@@ -374,8 +376,12 @@ public class GameHud : MonoBehaviour, IMenuSelector
         obj.transform.SetParent(parent, false);
         TextMeshProUGUI text = obj.AddComponent<TextMeshProUGUI>();
         text.text = value;
+        // 日本語のフォント（太字は、このフォント自体が太いので使わない）
+        if (GameFonts.Body != null)
+        {
+            text.font = GameFonts.Body;
+        }
         text.fontSize = fontSize;
-        text.fontStyle = FontStyles.Bold;
         text.color = color;
         text.alignment = TextAlignmentOptions.Center;
         text.textWrappingMode = TextWrappingModes.NoWrap;

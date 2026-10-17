@@ -44,9 +44,9 @@ public class StageCard : MonoBehaviour
         int deaths = SaveData.GetDeaths(k_SceneName);
         int clears = SaveData.GetClears(k_SceneName);
         float rate = SaveData.GetClearRate(k_SceneName);
-        SetText(deathText_, "DEATHS   " + deaths);
-        SetText(clearText_, "CLEARS   " + clears);
-        SetText(rateText_, "CLEAR RATE   " + (rate * 100.0f).ToString("0.0") + "%");
+        SetText(deathText_, "死亡数   " + deaths);
+        SetText(clearText_, "クリア数   " + clears);
+        SetText(rateText_, "クリア率   " + (rate * 100.0f).ToString("0.0") + "%");
     }
 
     private void ApplyFrames()
@@ -59,6 +59,7 @@ public class StageCard : MonoBehaviour
         }
         if (noImageText_ != null)
         {
+            noImageText_.text = "画像なし";
             noImageText_.gameObject.SetActive(k_StageImage == null);
         }
     }
