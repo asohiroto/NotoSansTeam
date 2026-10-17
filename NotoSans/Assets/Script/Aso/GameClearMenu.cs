@@ -72,6 +72,7 @@ public class GameClearMenu : MonoBehaviour, IMenuSelector
         if (move != 0)
         {
             selected_ = (selected_ + move + buttons_.Length) % buttons_.Length;
+            SoundEffects.Play(SoundEffects.Se.Change);
         }
         if (submit)
         {
@@ -82,7 +83,11 @@ public class GameClearMenu : MonoBehaviour, IMenuSelector
 
     public void Select(int index)
     {
-        selected_ = index;
+        if (index != selected_)
+        {
+            selected_ = index;
+            SoundEffects.Play(SoundEffects.Se.Change);
+        }
     }
 
     public void Activate(int index)
@@ -91,6 +96,7 @@ public class GameClearMenu : MonoBehaviour, IMenuSelector
         {
             return;
         }
+        SoundEffects.Play(SoundEffects.Se.Select);
         SceneTransition.Go(index == 0 ? k_TitleScene : k_StageSelectScene);
     }
 

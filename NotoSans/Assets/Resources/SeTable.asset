@@ -16,4 +16,9 @@ MonoBehaviour:
   roll: {fileID: 8300000, guid: 74dca7dbbafd9404bbc1692f02927694, type: 3}
   revive: {fileID: 8300000, guid: 5f949d3e4777971418458f1981ff863e, type: 3}
   clear: {fileID: 8300000, guid: bd0e21bae29b22f4a86fd611c6aeec34, type: 3}
+  change: {fileID: 8300000, guid: 9852873427d8b38438eff7523ee98864, type: 3}
+  select: {fileID: 8300000, guid: fec4a6c06e86d6445aa507a6ddc91dde, type: 3}
+  cancel: {fileID: 8300000, guid: c51149c198cc24145bbbcc67b9b7b826, type: 3}
+  bombStartTime: 0.299
+  rollStartTime: 0.471
   volume: 1

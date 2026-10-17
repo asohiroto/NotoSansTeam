@@ -87,6 +87,7 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         if (move != 0 && k_Buttons.Length > 0)
         {
             selected_ = (selected_ + move + k_Buttons.Length) % k_Buttons.Length;
+            SoundEffects.Play(SoundEffects.Se.Change);
         }
         if (submit)
         {
@@ -99,7 +100,11 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     // マウスが乗ったとき
     public void Select(int index)
     {
-        selected_ = index;
+        if (index != selected_)
+        {
+            selected_ = index;
+            SoundEffects.Play(SoundEffects.Se.Change);
+        }
     }
 
     public void Activate(int index)
@@ -111,15 +116,18 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         switch (k_Actions[index])
         {
             case MenuAction.ModeSelect:
+                SoundEffects.Play(SoundEffects.Se.Select);
                 SceneTransition.Go(k_ModeSelectScene);
                 break;
             case MenuAction.Options:
                 if (!string.IsNullOrEmpty(k_OptionsScene))
                 {
+                    SoundEffects.Play(SoundEffects.Se.Select);
                     SceneTransition.Go(k_OptionsScene);
                 }
                 break;
             case MenuAction.Quit:
+                SoundEffects.Play(SoundEffects.Se.Select);
                 Quit();
                 break;
         }

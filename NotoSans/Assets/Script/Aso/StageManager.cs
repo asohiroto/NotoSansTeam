@@ -99,6 +99,11 @@ public class StageManager : MonoBehaviour
         }
         // 1回の死につき1つだけ数える（リセット中に重ねて呼ばれた分は上で弾いている）
         self.deathCount_++;
+        // 死んだ場所に墓を立てる（プレイヤーを隠すより前に、位置を取っておく）
+        if (self.player_ != null)
+        {
+            Gravestone.Spawn(self.player_.transform.position);
+        }
         // ステージごとの累計死亡数をセーブする（モード選択で表示する）
         SaveData.AddDeath(SceneManager.GetActiveScene().name);
         SoundEffects.Play(SoundEffects.Se.Bomb);

@@ -1520,10 +1520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f107d871f3c23354495e245a65e39080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAppeal
-  k_SouthState: Appeal_Clap
-  k_EastState: Appeal_Spin3
-  k_NorthState: Appeal_Spin4
-  k_WestState: Appeal_StandC
+  k_StageTurnState: Appeal_Spin3
   k_CrossFadeTime: 0.15
 --- !u!1 &3035940203431382957
 GameObject:
@@ -2930,7 +2927,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1264fa59b9e53ff45a7824e8bd6ef984, type: 2}
+  - {fileID: 2100000, guid: 71b5f8c19fc10f14d98410a4d317939b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
