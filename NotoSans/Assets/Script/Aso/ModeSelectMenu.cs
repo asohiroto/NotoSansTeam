@@ -217,6 +217,7 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             if (moveX != 0 || moveY != 0)
             {
                 confirmSelected_ = 1 - confirmSelected_;
+                SoundEffects.Play(SoundEffects.Se.Change);
             }
             if (submit)
             {
@@ -224,11 +225,14 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             }
             else if (back)
             {
+                SoundEffects.Play(SoundEffects.Se.Cancel);
                 CloseConfirm();
             }
         }
         else
         {
+            int beforeSelected = selected_;
+            int beforeRow = row_;
             if (moveX != 0 && k_Cards.Length > 0)
             {
                 // 隠れているステージは飛ばす
@@ -247,6 +251,11 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             {
                 row_ = 0;
             }
+            // 選んでいるボタンが変わったら、移動の音を鳴らす
+            if (selected_ != beforeSelected || row_ != beforeRow)
+            {
+                SoundEffects.Play(SoundEffects.Se.Change);
+            }
 
             if (submit)
             {
@@ -254,6 +263,7 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
             }
             else if (back)
             {
+                SoundEffects.Play(SoundEffects.Se.Cancel);
                 SceneTransition.Go(k_TitleScene);
             }
         }
@@ -264,6 +274,9 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
     // マウスが乗ったとき（0〜: ステージ、その後: スコア削除、1000〜: 確認ポップアップ）
     public void Select(int index)
     {
+        int beforeSelected = selected_;
+        int beforeRow = row_;
+        int beforeConfirm = confirmSelected_;
         if (index >= k_ConfirmIndexBase)
         {
             confirmSelected_ = index - k_ConfirmIndexBase;
@@ -280,6 +293,11 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
                 selected_ = index;
                 row_ = 0;
             }
+        }
+        // マウスで別のボタンに乗ったときも、移動の音を鳴らす
+        if (selected_ != beforeSelected || row_ != beforeRow || confirmSelected_ != beforeConfirm)
+        {
+            SoundEffects.Play(SoundEffects.Se.Change);
         }
     }
 
@@ -301,15 +319,18 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
         }
         else if (index >= k_Cards.Length)
         {
+            SoundEffects.Play(SoundEffects.Se.Select);
             OpenConfirm(index - k_Cards.Length);
         }
         else if (index >= 0)
         {
-            // まだ解放されていないステージには行けない
+            // まだ解放されていないステージには行けない（行けない音を鳴らす）
             if (k_Cards[index].IsLocked)
             {
+                SoundEffects.Play(SoundEffects.Se.Cancel);
                 return;
             }
+            SoundEffects.Play(SoundEffects.Se.Select);
             SceneTransition.Go(k_Cards[index].SceneName);
         }
     }
@@ -334,9 +355,15 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
     {
         if (button == 0)
         {
-            // YES：そのステージの死亡数とクリア数を消して、表示を更新する
+            // はい：そのステージの死亡数とクリア数を消して、表示を更新する
+            SoundEffects.Play(SoundEffects.Se.Select);
             SaveData.DeleteStage(k_Cards[deleteTarget_].SceneName);
             k_Cards[deleteTarget_].Refresh();
+        }
+        else
+        {
+            // いいえ：やめる
+            SoundEffects.Play(SoundEffects.Se.Cancel);
         }
         CloseConfirm();
     }

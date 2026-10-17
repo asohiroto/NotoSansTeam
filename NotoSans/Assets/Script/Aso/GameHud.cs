@@ -107,6 +107,7 @@ public class GameHud : MonoBehaviour, IMenuSelector
                 // ポーズしていないときは、スタートボタンだけ受け付ける
                 if (start)
                 {
+                    SoundEffects.Play(SoundEffects.Se.Select);
                     SetPage(Page.Pause);
                 }
                 break;
@@ -114,6 +115,7 @@ public class GameHud : MonoBehaviour, IMenuSelector
             case Page.Pause:
                 if (start || back)
                 {
+                    SoundEffects.Play(SoundEffects.Se.Cancel);
                     SetPage(Page.None);
                 }
                 else
@@ -130,10 +132,12 @@ public class GameHud : MonoBehaviour, IMenuSelector
                 // 確認中は、戻る操作で「NO」と同じ（ポーズのメニューへ戻る）
                 if (back && !start)
                 {
+                    SoundEffects.Play(SoundEffects.Se.Cancel);
                     SetPage(Page.Pause, 2);
                 }
                 else if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
                 {
+                    SoundEffects.Play(SoundEffects.Se.Cancel);
                     SetPage(Page.Pause, 2);
                 }
                 else
@@ -155,13 +159,18 @@ public class GameHud : MonoBehaviour, IMenuSelector
         if (move != 0 && count > 0)
         {
             selected_ = (selected_ + move + count) % count;
+            SoundEffects.Play(SoundEffects.Se.Change);
         }
     }
 
     // マウスが乗ったとき（いま表示しているページのボタンの番号）
     public void Select(int index)
     {
-        selected_ = index;
+        if (index != selected_)
+        {
+            selected_ = index;
+            SoundEffects.Play(SoundEffects.Se.Change);
+        }
     }
 
     // 決定（いま表示しているページのボタンの番号）
@@ -177,14 +186,17 @@ public class GameHud : MonoBehaviour, IMenuSelector
             switch (index)
             {
                 case 0:
+                    SoundEffects.Play(SoundEffects.Se.Cancel);
                     SetPage(Page.None);
                     break;
                 case 1:
+                    SoundEffects.Play(SoundEffects.Se.Select);
                     // 遷移の演出中も止めたままにしておく（シーンが替わると元に戻る）
                     SceneTransition.Go(k_StageSelectScene);
                     break;
                 case 2:
-                    // 確認のポップアップを出す。最初は「NO」を選んでおく
+                    SoundEffects.Play(SoundEffects.Se.Select);
+                    // 確認のポップアップを出す。最初は「いいえ」を選んでおく
                     SetPage(Page.ConfirmQuit, 1);
                     break;
             }
@@ -193,10 +205,12 @@ public class GameHud : MonoBehaviour, IMenuSelector
         {
             if (index == 0)
             {
+                SoundEffects.Play(SoundEffects.Se.Select);
                 Quit();
             }
             else
             {
+                SoundEffects.Play(SoundEffects.Se.Cancel);
                 SetPage(Page.Pause, 2);
             }
         }
