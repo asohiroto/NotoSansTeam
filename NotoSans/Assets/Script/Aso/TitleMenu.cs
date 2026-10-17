@@ -1,16 +1,28 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-// タイトルのメニュー（モード選択へ / ゲームをやめる）。
+// タイトルのメニュー（モード選択へ / オプション / ゲームをやめる）。
 // 十字キー（キーボードの矢印キーも可）で選び、選んでいるボタンは大きくなる。決定は A ボタン（Enter / スペース）
-public class TitleMenu : MonoBehaviour
+public class TitleMenu : MonoBehaviour, IMenuSelector
 {
-    // 選べるボタン（順番に。1つ目＝モード選択へ、2つ目＝ゲームをやめる）
+    public enum MenuAction
+    {
+        // モード選択のシーンへ
+        ModeSelect,
+        // オプション
+        Options,
+        // ゲームをやめる
+        Quit,
+    }
+
+    // 選べるボタン（順番に）と、そのボタンを押したときの動き（同じ順番）
     [SerializeField] private RectTransform[] k_Buttons;
+    [SerializeField] private MenuAction[] k_Actions;
     // モード選択のシーン名（Build Settings に入れておくこと）
     [SerializeField] private string k_ModeSelectScene = "ModeSelectScene";
+    // オプションのシーン名（空のうちは、押しても何も起きない。オプション画面ができたら入れる）
+    [SerializeField] private string k_OptionsScene = "";
 
     // 選んでいるときの大きさ（選んでいないときは 1）
     [SerializeField] private float k_SelectedScale = 1.25f;
@@ -79,17 +91,24 @@ public class TitleMenu : MonoBehaviour
 
     public void Activate(int index)
     {
-        if (SceneTransition.IsBusy)
+        if (SceneTransition.IsBusy || index < 0 || index >= k_Actions.Length)
         {
             return;
         }
-        if (index == 0)
+        switch (k_Actions[index])
         {
-            SceneTransition.Go(k_ModeSelectScene);
-        }
-        else
-        {
-            Quit();
+            case MenuAction.ModeSelect:
+                SceneTransition.Go(k_ModeSelectScene);
+                break;
+            case MenuAction.Options:
+                if (!string.IsNullOrEmpty(k_OptionsScene))
+                {
+                    SceneTransition.Go(k_OptionsScene);
+                }
+                break;
+            case MenuAction.Quit:
+                Quit();
+                break;
         }
     }
 
@@ -118,28 +137,5 @@ public class TitleMenu : MonoBehaviour
                 image.color = on ? k_SelectedColor : k_NormalColor;
             }
         }
-    }
-}
-
-// マウスでボタンを選ぶ・押すための補助
-public class MenuButtonPointer : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
-{
-    private TitleMenu menu_;
-    private int index_;
-
-    public void Init(TitleMenu menu, int index)
-    {
-        menu_ = menu;
-        index_ = index;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        menu_.Select(index_);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        menu_.Activate(index_);
     }
 }

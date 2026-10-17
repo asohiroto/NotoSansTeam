@@ -50,6 +50,8 @@ public class StageClearItem : MonoBehaviour
         }
 
         cleared_ = true;
+        // ステージごとの累計クリア数をセーブする（モード選択で表示する）
+        SaveData.AddClear(SceneManager.GetActiveScene().name);
         // 音源はシーンをまたいで残るので、遷移しても最後まで鳴る
         SoundEffects.Play(SoundEffects.Se.Clear);
         SceneManager.LoadScene(nextSceneName_);
