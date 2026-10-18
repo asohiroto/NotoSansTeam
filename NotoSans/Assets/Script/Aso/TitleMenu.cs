@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,8 +23,6 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     [SerializeField] private MenuAction[] k_Actions;
     // モード選択のシーン名（Build Settings に入れておくこと）
     [SerializeField] private string k_ModeSelectScene = "ModeSelectScene";
-    // オプションのシーン名（空のうちは、押しても何も起きない。オプション画面ができたら入れる）
-    [SerializeField] private string k_OptionsScene = "";
 
     // 選んでいるときの大きさ（選んでいないときは 1）
     [SerializeField] private float k_SelectedScale = 1.25f;
@@ -41,12 +40,19 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     [SerializeField] private Color k_NormalTextColor = Color.white;
 
     private int selected_ = 0;
+    // オプション画面
+    private OptionsPanel optionsPanel_;
 
     void Start()
     {
         // 日本語のフォントにする
         Canvas canvas = GetComponentInParent<Canvas>();
-        GameFonts.ApplyBody(canvas != null ? canvas.transform : transform);
+        Transform canvasRoot = canvas != null ? canvas.transform : transform;
+
+        // オプションのボタンが無ければ、他のボタンを複製して差し込む（シーンの設定が古くても、必ず出る）
+        EnsureOptionsButton();
+        optionsPanel_ = OptionsPanel.Create(canvasRoot);
+        GameFonts.ApplyBody(canvasRoot);
 
         for (int i = 0; i < k_Buttons.Length; i++)
         {
@@ -57,10 +63,58 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         Apply(true);
     }
 
+    // 「オプション」のボタンを、モード選択のボタンの次に作る（既にあれば何もしない）
+    void EnsureOptionsButton()
+    {
+        if (k_Buttons == null || k_Buttons.Length == 0)
+        {
+            return;
+        }
+        foreach (MenuAction action in k_Actions)
+        {
+            if (action == MenuAction.Options)
+            {
+                return;
+            }
+        }
+
+        RectTransform source = k_Buttons[0];
+        GameObject clone = Instantiate(source.gameObject, source.parent);
+        clone.name = "Button_Options";
+        TMP_Text label = clone.GetComponentInChildren<TMP_Text>();
+        if (label != null)
+        {
+            label.text = "オプション";
+        }
+
+        // モード選択の次に差し込む
+        List<RectTransform> buttons = new List<RectTransform>(k_Buttons);
+        List<MenuAction> actions = new List<MenuAction>(k_Actions);
+        buttons.Insert(1, (RectTransform)clone.transform);
+        actions.Insert(1, MenuAction.Options);
+        k_Buttons = buttons.ToArray();
+        k_Actions = actions.ToArray();
+
+        // 3つのボタンを、上から等間隔に並べる
+        float topY = 320.0f;
+        float spacing = 115.0f;
+        for (int i = 0; i < k_Buttons.Length; i++)
+        {
+            k_Buttons[i].anchoredPosition = new Vector2(source.anchoredPosition.x, topY - spacing * i);
+        }
+    }
+
     void Update()
     {
         // 遷移の演出中は操作を受け付けない
         if (SceneTransition.IsBusy)
+        {
+            Apply(false);
+            return;
+        }
+
+        // オプション画面が開いている間（と、閉じたフレーム）は、タイトルのボタンを操作しない
+        if (optionsPanel_ != null && (optionsPanel_.IsOpen || Time.frameCount <= optionsPanel_.LastChangeFrame))
         {
             Apply(false);
             return;
@@ -120,10 +174,10 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
                 SceneTransition.Go(k_ModeSelectScene);
                 break;
             case MenuAction.Options:
-                if (!string.IsNullOrEmpty(k_OptionsScene))
+                SoundEffects.Play(SoundEffects.Se.Select);
+                if (optionsPanel_ != null)
                 {
-                    SoundEffects.Play(SoundEffects.Se.Select);
-                    SceneTransition.Go(k_OptionsScene);
+                    optionsPanel_.Open();
                 }
                 break;
             case MenuAction.Quit:

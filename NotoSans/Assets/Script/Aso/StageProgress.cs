@@ -24,9 +24,16 @@ public static class StageProgress
     // エクストラの解放に必要な、通常ステージそれぞれのクリア回数
     public const int ExtraClearCount = 3;
 
-    // クリアしたあとに行くシーン。次のステージがあればそれ、最後ならクリアシーン、並びに無ければステージ選択
+    // エクストラステージをクリアしたときに行くシーン（スタッフロール）
+    public const string StaffRollScene = "StaffRollScene";
+
+    // クリアしたあとに行くシーン。次のステージがあればそれ、最後ならクリアシーン、エクストラならスタッフロール、並びに無ければステージ選択
     public static string GetNextScene(string current)
     {
+        if (current == ExtraStage)
+        {
+            return StaffRollScene;
+        }
         int index = Array.IndexOf(Stages, current);
         if (index < 0)
         {

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // ゲーム中のUI。プレハブ（GameHud）をシーンに入れるだけで、見た目はすべて自動で作られて動く。
@@ -14,6 +15,8 @@ public class GameHud : MonoBehaviour, IMenuSelector
 {
     // 「ステージ選択へ」で遷移するシーン名（Build Settings に入れておくこと）
     [SerializeField] private string k_StageSelectScene = "ModeSelectScene";
+    // ヒントの動画のファイル名（Assets/StreamingAssets の中に置く。エクストラステージのポーズにだけ「ヒント」ボタンが出る）
+    [SerializeField] private string k_HintVideoFile = "Hint.mp4";
 
     // 選んでいるボタンの大きさ（選んでいないときは 1）と、大きさが変わる速さ
     [SerializeField] private float k_SelectedScale = 1.2f;
@@ -34,6 +37,17 @@ public class GameHud : MonoBehaviour, IMenuSelector
         Pause,
         // 「ゲーム終了」の確認ポップアップ
         ConfirmQuit,
+        // ヒントの動画（エクストラステージのポーズだけ）
+        Hint,
+    }
+
+    // ポーズのメニューのボタンが、押されたときにすること
+    private enum PauseAction
+    {
+        Resume,
+        Hint,
+        StageSelect,
+        Quit,
     }
 
     // 死亡数の表示を更新する間隔（秒）
@@ -50,6 +64,9 @@ public class GameHud : MonoBehaviour, IMenuSelector
     private GameObject confirmPanel_;
     private RectTransform[] pauseButtons_;
     private RectTransform[] confirmButtons_;
+    // ポーズのメニューの、ボタンごとの動き（ボタンと同じ順番）
+    private PauseAction[] pauseActions_;
+    private HintVideoView hintView_;
 
     void Awake()
     {
@@ -128,17 +145,30 @@ public class GameHud : MonoBehaviour, IMenuSelector
                 }
                 break;
 
+            case Page.Hint:
+                // ヒントの動画を見ている間：決定・戻る・スタートで閉じる
+                if (hintView_ == null || !hintView_.IsOpen)
+                {
+                    SetPage(Page.Pause, IndexOf(PauseAction.Hint));
+                }
+                else if (submit || back || start)
+                {
+                    SoundEffects.Play(SoundEffects.Se.Cancel);
+                    hintView_.Close();
+                }
+                break;
+
             case Page.ConfirmQuit:
                 // 確認中は、戻る操作で「NO」と同じ（ポーズのメニューへ戻る）
                 if (back && !start)
                 {
                     SoundEffects.Play(SoundEffects.Se.Cancel);
-                    SetPage(Page.Pause, 2);
+                    SetPage(Page.Pause, IndexOf(PauseAction.Quit));
                 }
                 else if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
                 {
                     SoundEffects.Play(SoundEffects.Se.Cancel);
-                    SetPage(Page.Pause, 2);
+                    SetPage(Page.Pause, IndexOf(PauseAction.Quit));
                 }
                 else
                 {
@@ -183,18 +213,27 @@ public class GameHud : MonoBehaviour, IMenuSelector
 
         if (page_ == Page.Pause)
         {
-            switch (index)
+            if (index < 0 || index >= pauseActions_.Length)
             {
-                case 0:
+                return;
+            }
+            switch (pauseActions_[index])
+            {
+                case PauseAction.Resume:
                     SoundEffects.Play(SoundEffects.Se.Cancel);
                     SetPage(Page.None);
                     break;
-                case 1:
+                case PauseAction.Hint:
+                    SoundEffects.Play(SoundEffects.Se.Select);
+                    page_ = Page.Hint;
+                    hintView_.Open();
+                    break;
+                case PauseAction.StageSelect:
                     SoundEffects.Play(SoundEffects.Se.Select);
                     // 遷移の演出中も止めたままにしておく（シーンが替わると元に戻る）
                     SceneTransition.Go(k_StageSelectScene);
                     break;
-                case 2:
+                case PauseAction.Quit:
                     SoundEffects.Play(SoundEffects.Se.Select);
                     // 確認のポップアップを出す。最初は「いいえ」を選んでおく
                     SetPage(Page.ConfirmQuit, 1);
@@ -211,7 +250,7 @@ public class GameHud : MonoBehaviour, IMenuSelector
             else
             {
                 SoundEffects.Play(SoundEffects.Se.Cancel);
-                SetPage(Page.Pause, 2);
+                SetPage(Page.Pause, IndexOf(PauseAction.Quit));
             }
         }
     }
@@ -321,11 +360,22 @@ public class GameHud : MonoBehaviour, IMenuSelector
         SetRect(pauseTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.0f, 260.0f), new Vector2(1000.0f, 160.0f));
         TMP_Text pauseHint = CreateText("PauseHint", pausePanel_.transform, "十字キー：選ぶ　　Aボタン：決定　　スタート／Bボタン：再開", 32, new Color(1.0f, 1.0f, 1.0f, 0.75f));
         SetRect(pauseHint.rectTransform, new Vector2(0.5f, 0.0f), new Vector2(0.5f, 0.0f), new Vector2(0.0f, 60.0f), new Vector2(1500.0f, 50.0f));
-        pauseButtons_ = new RectTransform[3];
-        string[] pauseLabels = { "再開", "ステージ選択", "ゲーム終了" };
+        // ポーズのメニューのボタン。エクストラステージのポーズにだけ、「ヒント」（動画）のボタンが入る
+        bool hasHint = SceneManager.GetActiveScene().name == StageProgress.ExtraStage;
+        System.Collections.Generic.List<PauseAction> actions = new System.Collections.Generic.List<PauseAction>();
+        System.Collections.Generic.List<string> labels = new System.Collections.Generic.List<string>();
+        actions.Add(PauseAction.Resume); labels.Add("再開");
+        if (hasHint) { actions.Add(PauseAction.Hint); labels.Add("ヒント"); }
+        actions.Add(PauseAction.StageSelect); labels.Add("ステージ選択");
+        actions.Add(PauseAction.Quit); labels.Add("ゲーム終了");
+        pauseActions_ = actions.ToArray();
+        pauseButtons_ = new RectTransform[pauseActions_.Length];
+        // ボタンが4つになったときは、間を少し詰めて、画面に収める
+        float spacing = pauseActions_.Length > 3 ? 115.0f : 130.0f;
+        float topY = pauseActions_.Length > 3 ? 110.0f : 80.0f;
         for (int i = 0; i < pauseButtons_.Length; i++)
         {
-            pauseButtons_[i] = CreateButton("PauseButton" + i, pausePanel_.transform, pauseLabels[i], new Vector2(0.0f, 80.0f - 130.0f * i), new Vector2(560.0f, 100.0f));
+            pauseButtons_[i] = CreateButton("PauseButton" + i, pausePanel_.transform, labels[i], new Vector2(0.0f, topY - spacing * i), new Vector2(560.0f, 100.0f));
         }
 
         // ゲーム終了の確認ポップアップ（ポーズのメニューの手前に出す）
@@ -343,6 +393,34 @@ public class GameHud : MonoBehaviour, IMenuSelector
         {
             confirmButtons_[i] = CreateButton("ConfirmButton" + i, window.transform, confirmLabels[i], new Vector2(-210.0f + 420.0f * i, -100.0f), new Vector2(360.0f, 100.0f));
         }
+
+        // ヒントの動画（エクストラステージのポーズだけ。いちばん手前に出す）。動画が終わる・閉じたら、ポーズのメニューに戻る
+        if (hasHint)
+        {
+            hintView_ = HintVideoView.Create(root, k_HintVideoFile, OnHintClosed);
+        }
+    }
+
+    // ヒントの動画が閉じたとき：ポーズのメニューに戻って、「ヒント」のボタンを選んだ状態にする
+    void OnHintClosed()
+    {
+        if (page_ == Page.Hint)
+        {
+            SetPage(Page.Pause, IndexOf(PauseAction.Hint));
+        }
+    }
+
+    // ポーズのメニューの中で、その動きのボタンが何番目か
+    int IndexOf(PauseAction action)
+    {
+        for (int i = 0; i < pauseActions_.Length; i++)
+        {
+            if (pauseActions_[i] == action)
+            {
+                return i;
+            }
+        }
+        return 0;
     }
 
     // マウスで選ぶ・押すために EventSystem が要る。無いシーンでは自動で作る

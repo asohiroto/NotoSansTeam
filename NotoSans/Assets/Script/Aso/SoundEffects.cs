@@ -72,7 +72,7 @@ public static class SoundEffects
         }
 
         // 重ねて鳴らせるよう PlayOneShot を使う
-        source_.PlayOneShot(clip, table_.volume);
+        source_.PlayOneShot(clip, table_.volume * GameSettings.SeVolume);
     }
 
     // 途中から鳴らすための音源（PlayOneShot は途中からは鳴らせない）。同時に鳴らせる数だけ用意する
@@ -108,7 +108,7 @@ public static class SoundEffects
         }
 
         source.clip = clip;
-        source.volume = table_.volume;
+        source.volume = table_.volume * GameSettings.SeVolume;
         source.time = Mathf.Clamp(startTime, 0.0f, Mathf.Max(0.0f, clip.length - 0.01f));
         source.Play();
     }

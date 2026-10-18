@@ -31,8 +31,14 @@ public static class SaveData
         public bool extraUnlocked;
     }
 
-    // データフォルダの中のセーブ用フォルダ名・ファイル名
+    // データフォルダの中のセーブ用フォルダ名・ファイル名。
+    // エディターでの試し遊びと、ビルドした本番とで、同じセーブを使わないよう、フォルダを分ける
+    // （同じ場所だと、エディターで試した死亡数やクリアが、ビルドにそのまま出てしまう）
+#if UNITY_EDITOR
+    private const string k_FolderName = "Save_Editor";
+#else
     private const string k_FolderName = "Save";
+#endif
     private const string k_FileName = "stage_records.json";
 
     private static SaveFile file_;

@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float kGroundCheckDistance_ = 0.05f;
     private GameObject player_;
     private Rigidbody rigidbody_;
+    // 死んでいるか（リセットされるまで、死亡の処理を1回だけにするため）
+    private bool dead_ = false;
 
     // 残弾数
     public int remainAmmunition_ = 0;
@@ -66,6 +68,7 @@ public class Player : MonoBehaviour
     // 初期位置・体力・弾薬・速度・状態を最初の状態に戻す（StageManager から呼ぶ）
     public void Respawn()
     {
+        dead_ = false;
         transform.position = kFirstPosition_;
         hp_ = k_MaxHp;
         remainAmmunition_ = k_MaxAmmunition;
@@ -109,6 +112,11 @@ public class Player : MonoBehaviour
     // 空中：重力で落下し、落下中に床に触れたら着地
     void UpdateAir()
     {
+        // 死んだあとは、リセットされる（Respawn）まで何もしない（死亡の処理を二重に走らせない）
+        if (dead_)
+        {
+            return;
+        }
         speed_ += kGravityAccel_;
 
         if (speed_.y <= kPlayerMinSpeed_.y)
@@ -125,6 +133,7 @@ public class Player : MonoBehaviour
             // 落下中に床に当たったら着地
             if (speed_.y <= 0.0f && hit.collider.CompareTag("Floor"))
             {
+                dead_ = true;
                 EffectManager.PlayDeath(bodyCenter);
                 // プレイヤーを隠し、少し待ってからステージをリセットして初期位置に戻す
                 StageManager.OnPlayerDied();

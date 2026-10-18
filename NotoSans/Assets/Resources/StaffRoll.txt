@@ -1,0 +1,87 @@
+// ============================================================================
+// スタッフロールの内容です。このファイルを書き換えて保存すると、ゲームのスタッフロールが変わります。
+//
+// 書き方
+//   「//」で始まる行 … メモ（画面には出ません）
+//   「# 」で始まる行  … 大見出し（金色の大きい文字）
+//   「## 」で始まる行 … 小見出し（水色）
+//   空の行          … 少し空ける
+//   それ以外の行      … ふつうの文字（中央ぞろえ）
+//
+// 使える文字：日本語（ひらがな・カタカナ・漢字）、英数字、記号。1行は、画面の幅に入る長さにしてください。
+// 流れる速さは、StaffRollScene の「StaffRoll」にある StaffRollMenu の「K Scroll Speed」で変えられます。
+// ============================================================================
+
+# ぐるりんダイブ
+
+# スタッフ
+
+## 企画
+麻生大翔
+
+## プログラム
+麻生大翔
+
+## ステージ制作
+ステージ１：西村輝空
+ステージ２：平木諒
+エクストラ：井手威吹
+
+## サウンド
+西村輝空
+
+## スペシャルサンクス
+ここまで遊んでくれた皆さん！
+
+# 使用素材
+
+## キャラクター
+ユニティちゃん（Haons SD series Pack）
+© Unity Technologies Japan/UCL
+このゲームは「ユニティちゃんライセンス条項」の元に提供されています
+
+## 髪のゆれ・トゥーン表現
+Unity-Chan Spring Bone
+Unity-Chan Toon Shader
+
+## UI 素材
+UI Pack（Kenney / CC0）
+https://kenney.nl
+
+## フォント
+『RocknRoll One』
+『Dela Gothic One』
+（SIL Open Font License 1.1）
+
+## エフェクト
+Effekseer（EffekseerForUnity 1.80.7）
+
+## ステージ・背景素材
+『Decrepit Dungeon LITE』
+『SciFi Warehouse Kit』
+『Free Rocks』
+『Ruined Tower』
+『Stylized Lava Materials』
+
+## BGM
+『騒音のない世界』様より
+タイトル「スペースシップ」
+ステージ選択「迷い子」
+ステージ1「それゆけワンダーランド」
+ステージ2「てのひらの宇宙」
+エクストラステージ「路地裏探検隊」
+クリア「破天荒」
+スタッフロール「ワンルームの自由」
+
+## 効果音
+AudioStockより
+
+## 制作ツール
+Unity 6（6000.6.0f1）/ Universal Render Pipeline
+TextMesh Pro
+Input System
+Effekseer（エフェクト制作）
+Claude Code（開発の補助）
+Unity MCP（CoplayDev）
+
+# Thank you for playing!
