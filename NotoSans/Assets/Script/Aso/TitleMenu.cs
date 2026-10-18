@@ -49,6 +49,15 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         Canvas canvas = GetComponentInParent<Canvas>();
         Transform canvasRoot = canvas != null ? canvas.transform : transform;
 
+        // 歩き回るUnityちゃん（カメラから 5.5）が、ボタンの手前を通れるよう、画面の文字やボタンを、カメラから 6 の距離に置く。
+        // ロゴ（カメラから 7）よりは手前なので、オプション画面の暗い背景は、ロゴにもかかる
+        if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay && Camera.main != null)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = Camera.main;
+            canvas.planeDistance = 6.0f;
+        }
+
         // オプションのボタンが無ければ、他のボタンを複製して差し込む（シーンの設定が古くても、必ず出る）
         EnsureOptionsButton();
         optionsPanel_ = OptionsPanel.Create(canvasRoot);

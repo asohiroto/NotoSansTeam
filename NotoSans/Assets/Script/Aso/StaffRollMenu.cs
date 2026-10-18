@@ -115,7 +115,17 @@ public class StaffRollMenu : MonoBehaviour
         GameObject canvasObj = new GameObject("StaffRollCanvas");
         canvasObj.transform.SetParent(transform, false);
         Canvas canvas = canvasObj.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        // Unityちゃんが文字の手前に出られるよう、カメラに映る方式にする（文字は、カメラから遠い面に置く）
+        if (Camera.main != null)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = Camera.main;
+            canvas.planeDistance = 12.0f;
+        }
+        else
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        }
         canvas.sortingOrder = 10;
         CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
