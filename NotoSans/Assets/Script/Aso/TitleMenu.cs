@@ -16,6 +16,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         Options,
         // ゲームをやめる
         Quit,
+        // 操作説明の画像を出す（シーンに保存されている番号がずれないよう、いちばん後ろに足している）
+        Controls,
     }
 
     // 選べるボタン（順番に）と、そのボタンを押したときの動き（同じ順番）
@@ -42,6 +44,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     private int selected_ = 0;
     // オプション画面
     private OptionsPanel optionsPanel_;
+    // 操作説明の画像
+    private ControlsGuideView guideView_;
 
     void Start()
     {
@@ -59,8 +63,11 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         }
 
         // オプションのボタンが無ければ、他のボタンを複製して差し込む（シーンの設定が古くても、必ず出る）
-        EnsureOptionsButton();
+        EnsureExtraButton(MenuAction.Options, "Button_Options", "オプション", 1);
+        EnsureExtraButton(MenuAction.Controls, "Button_Controls", "操作説明", 2);
+        LayoutButtons();
         optionsPanel_ = OptionsPanel.Create(canvasRoot);
+        guideView_ = ControlsGuideView.Create(canvasRoot);
         GameFonts.ApplyBody(canvasRoot);
 
         for (int i = 0; i < k_Buttons.Length; i++)
@@ -72,8 +79,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         Apply(true);
     }
 
-    // 「オプション」のボタンを、モード選択のボタンの次に作る（既にあれば何もしない）
-    void EnsureOptionsButton()
+    // 動きが action のボタンが無ければ、モード選択のボタンを複製して、index 番目に差し込む（シーンの設定が古くても、必ず出る）
+    void EnsureExtraButton(MenuAction newAction, string buttonName, string text, int index)
     {
         if (k_Buttons == null || k_Buttons.Length == 0)
         {
@@ -81,7 +88,7 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         }
         foreach (MenuAction action in k_Actions)
         {
-            if (action == MenuAction.Options)
+            if (action == newAction)
             {
                 return;
             }
@@ -89,27 +96,64 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
 
         RectTransform source = k_Buttons[0];
         GameObject clone = Instantiate(source.gameObject, source.parent);
-        clone.name = "Button_Options";
+        clone.name = buttonName;
         TMP_Text label = clone.GetComponentInChildren<TMP_Text>();
         if (label != null)
         {
-            label.text = "オプション";
+            label.text = text;
         }
 
-        // モード選択の次に差し込む
         List<RectTransform> buttons = new List<RectTransform>(k_Buttons);
         List<MenuAction> actions = new List<MenuAction>(k_Actions);
-        buttons.Insert(1, (RectTransform)clone.transform);
-        actions.Insert(1, MenuAction.Options);
+        index = Mathf.Min(index, buttons.Count);
+        buttons.Insert(index, (RectTransform)clone.transform);
+        actions.Insert(index, newAction);
         k_Buttons = buttons.ToArray();
         k_Actions = actions.ToArray();
 
-        // 3つのボタンを、上から等間隔に並べる
+    }
+
+    // ボタンを並べる。上から1行ずつ。「オプション」と「操作説明」は、1行に横並びにする（画面に収めるため）
+    void LayoutButtons()
+    {
+        if (k_Buttons == null || k_Buttons.Length == 0)
+        {
+            return;
+        }
         float topY = 320.0f;
         float spacing = 115.0f;
+        float centerX = k_Buttons[0].anchoredPosition.x;
+        float width = k_Buttons[0].sizeDelta.x;
+        // 他のボタンと同じ大きさのまま、左右に並べる（選んで大きくなっても重ならないよう、間を空ける）
+        float half = width;
+        float offset = width * 0.6f;
+
+        int row = 0;
+        bool sideRow = false;
         for (int i = 0; i < k_Buttons.Length; i++)
         {
-            k_Buttons[i].anchoredPosition = new Vector2(source.anchoredPosition.x, topY - spacing * i);
+            bool side = k_Actions[i] == MenuAction.Options || k_Actions[i] == MenuAction.Controls;
+            if (side)
+            {
+                // 横並びの1つ目で行を進め、2つ目は同じ行に置く
+                if (!sideRow)
+                {
+                    sideRow = true;
+                    k_Buttons[i].anchoredPosition = new Vector2(centerX - offset, topY - spacing * row);
+                }
+                else
+                {
+                    k_Buttons[i].anchoredPosition = new Vector2(centerX + offset, topY - spacing * row);
+                    sideRow = false;
+                    row++;
+                    k_Buttons[i].sizeDelta = new Vector2(half, k_Buttons[i].sizeDelta.y);
+                    k_Buttons[i - 1].sizeDelta = new Vector2(half, k_Buttons[i - 1].sizeDelta.y);
+                    continue;
+                }
+                continue;
+            }
+            k_Buttons[i].anchoredPosition = new Vector2(centerX, topY - spacing * row);
+            row++;
         }
     }
 
@@ -124,6 +168,13 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
 
         // オプション画面が開いている間（と、閉じたフレーム）は、タイトルのボタンを操作しない
         if (optionsPanel_ != null && (optionsPanel_.IsOpen || Time.frameCount <= optionsPanel_.LastChangeFrame))
+        {
+            Apply(false);
+            return;
+        }
+
+        // 操作説明の画像が開いている間（と、閉じたフレーム）も同じ
+        if (guideView_ != null && (guideView_.IsOpen || Time.frameCount <= guideView_.LastChangeFrame))
         {
             Apply(false);
             return;
@@ -187,6 +238,13 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
                 if (optionsPanel_ != null)
                 {
                     optionsPanel_.Open();
+                }
+                break;
+            case MenuAction.Controls:
+                SoundEffects.Play(SoundEffects.Se.Select);
+                if (guideView_ != null)
+                {
+                    guideView_.Open();
                 }
                 break;
             case MenuAction.Quit:

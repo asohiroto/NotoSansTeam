@@ -766,7 +766,6 @@ MonoBehaviour:
   - {fileID: 1321872850}
   k_Actions: 0000000002000000i
   k_ModeSelectScene: ModeSelectScene
-  k_OptionsScene: 
   k_SelectedScale: 1.25
   k_ScaleLerpRate: 14
   k_NormalSprite: {fileID: 21300000, guid: fa8dc87625d1cf443b20a25a108b71e0, type: 3}
@@ -1215,7 +1214,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1691039233}
-  - component: {fileID: 1691039232}
   - component: {fileID: 1691039234}
   m_Layer: 0
   m_Name: TitleScene
@@ -1224,21 +1222,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1691039232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691039231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d26bc5d0a088f4241b04b5e7f4e63808, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneTest
-  sceneList:
-  - key: 32
-    sceneName: ibukiScene1
 --- !u!4 &1691039233
 Transform:
   m_ObjectHideFlags: 0
