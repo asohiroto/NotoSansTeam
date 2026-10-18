@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &20751863400082408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3204789599196309596}
+  m_Layer: 0
+  m_Name: Prop_L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3204789599196309596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20751863400082408}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6262968391853843494}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &79507232212995812
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +40,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5248397878211347262}
-  - component: {fileID: 8124512659850737573}
   m_Layer: 0
   m_Name: Skirt_SideR_00
   m_TagString: Untagged
@@ -33,39 +63,6 @@ Transform:
   - {fileID: 4747409565177349214}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8124512659850737573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 79507232212995812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 590
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 8645997739820739029}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -15.8
-    max: 54.2
-  zAngleLimits:
-    active: 1
-    min: -58
-    max: 23.5
-  lengthLimitTargets: []
-  radius: 0.01
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &201776376883620179
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +135,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 764653170451558397}
-  - component: {fileID: 8714085772761473032}
   m_Layer: 0
   m_Name: Hand_LSphereCollider
   m_TagString: Untagged
@@ -161,21 +157,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6262968391853843494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8714085772761473032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244392809795411893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328bfb8438c749d46ad9174283110a36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.03
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &251772486373883533
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +203,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7343905447955576}
-  - component: {fileID: 2748336501830501714}
   m_Layer: 0
   m_Name: Accessory_00_rig_03
   m_TagString: Untagged
@@ -246,37 +226,6 @@ Transform:
   - {fileID: 3831927270204443694}
   m_Father: {fileID: 3554238708136774263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2748336501830501714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257772707424158942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &299369799953781321
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +523,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2845415379632762765}
-  - component: {fileID: 539820516494119352}
   m_Layer: 0
   m_Name: Hair_Front_00
   m_TagString: Untagged
@@ -596,39 +544,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4139625654599165278}
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &539820516494119352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457541932906541504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6912081421894266486}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: 0
-    max: 37.4
-  zAngleLimits:
-    active: 1
-    min: -24.9
-    max: 27
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &498501821765071102
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,7 +742,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1101605484217241839
 GameObject:
@@ -836,7 +753,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6261468909804585223}
-  - component: {fileID: 4541807138593645024}
   m_Layer: 0
   m_Name: Skirt_SideL_01
   m_TagString: Untagged
@@ -860,39 +776,6 @@ Transform:
   - {fileID: 2191963443216933679}
   m_Father: {fileID: 3746249748815153853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4541807138593645024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101605484217241839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 219
-  dragForce: 0.885
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 3746249748815153853}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -35
-    max: 43.5
-  zAngleLimits:
-    active: 0
-    min: -58
-    max: 23.5
-  lengthLimitTargets: []
-  radius: 0.01
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &1103102397357214061
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +785,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4747409565177349214}
-  - component: {fileID: 5189865482021872612}
   m_Layer: 0
   m_Name: Skirt_SideR_01
   m_TagString: Untagged
@@ -926,39 +808,6 @@ Transform:
   - {fileID: 3512562519769301616}
   m_Father: {fileID: 5248397878211347262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5189865482021872612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103102397357214061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 219
-  dragForce: 0.885
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 5248397878211347262}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -35
-    max: 43.5
-  zAngleLimits:
-    active: 0
-    min: -58
-    max: 23.5
-  lengthLimitTargets: []
-  radius: 0.01
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &1121477855572925683
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,7 +970,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4139625654599165278}
-  - component: {fileID: 1502354486312277022}
   m_Layer: 0
   m_Name: Hair_Front_01
   m_TagString: Untagged
@@ -1145,37 +993,6 @@ Transform:
   - {fileID: 1072457327490022631}
   m_Father: {fileID: 2845415379632762765}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1502354486312277022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203645067575295123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 2845415379632762765}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &1227578061134890657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,7 +1053,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1453105240051349162
 GameObject:
@@ -1583,7 +1400,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1264fa59b9e53ff45a7824e8bd6ef984, type: 2}
+  - {fileID: 2100000, guid: 71b5f8c19fc10f14d98410a4d317939b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1847,7 +1664,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7877242641715178277}
-  - component: {fileID: 2066965490651962718}
   m_Layer: 0
   m_Name: Skirt_Front_R_00
   m_TagString: Untagged
@@ -1871,39 +1687,6 @@ Transform:
   - {fileID: 1377080827301201767}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2066965490651962718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2175172444495103949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 254
-  dragForce: 0.889
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 3956371090553637076}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -28.9
-    max: 49.9
-  zAngleLimits:
-    active: 1
-    min: -0
-    max: 18.4
-  lengthLimitTargets: []
-  radius: 0.015
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &2190106173207748677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +1758,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3844218848523275394}
-  - component: {fileID: 589138511261632685}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_R_01
   m_TagString: Untagged
@@ -1999,41 +1781,6 @@ Transform:
   - {fileID: 4192009978408333525}
   m_Father: {fileID: 1466577509828275352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &589138511261632685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2259072312868125139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 65
-  dragForce: 0.891
-  springForce: {x: 0, y: -5, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 1466577509828275352}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -122
-    max: 124
-  zAngleLimits:
-    active: 1
-    min: -67.2
-    max: 67.2
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 5952531313184176888}
-  - {fileID: 5691965459660197178}
-  - {fileID: 6652806499788722572}
-  - {fileID: 49301782446749434}
-  panelColliders: []
 --- !u!1 &2315471407547503308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,7 +1821,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2733652092012729904}
-  - component: {fileID: 5952531313184176888}
   m_Layer: 0
   m_Name: Lower_Arm_LCapsuleCollider
   m_TagString: Untagged
@@ -2097,22 +1843,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5985212911880981646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &5952531313184176888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2341071862342835647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.05
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &2396029556243953899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2122,7 +1852,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7708955039591883355}
-  - component: {fileID: 7419658321280745851}
   m_Layer: 0
   m_Name: Hair_Side_R_01
   m_TagString: Untagged
@@ -2146,37 +1875,38 @@ Transform:
   - {fileID: 3387672512781474993}
   m_Father: {fileID: 314342046268913411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7419658321280745851
-MonoBehaviour:
+--- !u!1 &2408071451985421670
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2396029556243953899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 314342046268913411}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5232204067247914543}
+  m_Layer: 0
+  m_Name: root_head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5232204067247914543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408071451985421670}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5016003e-10, y: -0.0000045013426, z: -0.0000035381315}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 204272431933068721}
+  m_Father: {fileID: 4264389946716592668}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2422885322839282628
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,7 +2042,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1647372619036039955}
-  - component: {fileID: 6029999358008677819}
   m_Layer: 0
   m_Name: Hair_Side_L_00
   m_TagString: Untagged
@@ -2334,39 +2063,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7341427179910836501}
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6029999358008677819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2569680657780535270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 8877237711087054756}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -32.5
-    max: 0
-  zAngleLimits:
-    active: 1
-    min: -34.6
-    max: 29.7
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &2719035921920910847
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,13 +2219,13 @@ SkinnedMeshRenderer:
   m_Bones:
   - {fileID: 1647372619036039955}
   - {fileID: 7341427179910836501}
-  - {fileID: 4785978606265335546}
+  - {fileID: 3767783073812226616}
   - {fileID: 314342046268913411}
   - {fileID: 7708955039591883355}
   - {fileID: 2845415379632762765}
   - {fileID: 4139625654599165278}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 4785978606265335546}
+  m_RootBone: {fileID: 3767783073812226616}
   m_AABB:
     m_Center: {x: -0.18903753, y: 0.03142619, z: -0.000000074505806}
     m_Extent: {x: 0.20380124, y: 0.16856536, z: 0.30059248}
@@ -2561,8 +2259,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 204272431933068721}
-  m_Father: {fileID: 4264389946716592668}
+  - {fileID: 2845415379632762765}
+  - {fileID: 1647372619036039955}
+  - {fileID: 314342046268913411}
+  - {fileID: 6912081421894266486}
+  - {fileID: 8877237711087054756}
+  - {fileID: 4833203703632432224}
+  m_Father: {fileID: 7597630290376778042}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2988539428781621106
 GameObject:
@@ -2632,7 +2335,7 @@ Transform:
   - {fileID: 3473184843263437977}
   - {fileID: 456097875520876459}
   - {fileID: 764653170451558397}
-  - {fileID: 5259961412541374974}
+  - {fileID: 3204789599196309596}
   m_Father: {fileID: 5985212911880981646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3067072781846639285
@@ -2753,14 +2456,14 @@ SkinnedMeshRenderer:
   m_Mesh: {fileID: 2215254267426590249, guid: f6a92ea2a0c495f458a00ff908e394e3, type: 3}
   m_Bones:
   - {fileID: 819300236648241918}
-  - {fileID: 3767783073812226616}
+  - {fileID: 5232204067247914543}
   - {fileID: 3554238708136774263}
   - {fileID: 7343905447955576}
   - {fileID: 3793639034441832028}
   - {fileID: 6289390971876779281}
   - {fileID: 137268708317190589}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 3767783073812226616}
+  m_RootBone: {fileID: 5232204067247914543}
   m_AABB:
     m_Center: {x: -0.4244561, y: -0.1184445, z: 0.0046019256}
     m_Extent: {x: 0.14674678, y: 0.19232774, z: 0.34144354}
@@ -2809,7 +2512,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8742370523225640818}
-  - component: {fileID: 3637416677028434831}
   m_Layer: 0
   m_Name: Hand_RSphereCollider
   m_TagString: Untagged
@@ -2832,21 +2534,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 212057827541530582}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3637416677028434831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381355956344792294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328bfb8438c749d46ad9174283110a36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.03
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &3384129273213431650
 GameObject:
   m_ObjectHideFlags: 0
@@ -2856,7 +2543,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4321909084622802072}
-  - component: {fileID: 7253732490346022028}
   m_Layer: 0
   m_Name: Skirt_Back_R_01
   m_TagString: Untagged
@@ -2880,39 +2566,6 @@ Transform:
   - {fileID: 8367238612150526340}
   m_Father: {fileID: 4421020515644329277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7253732490346022028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3384129273213431650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 570
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 4421020515644329277}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.02
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &3408997810339863806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3121,7 +2774,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8645997739820739029}
-  - component: {fileID: 2459971405959719958}
   m_Layer: 0
   m_Name: SpringPivot_Skirt_Side_R_00
   m_TagString: Untagged
@@ -3144,18 +2796,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2202122601769945896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2459971405959719958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3574487058864589381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625e9c3b94e3dc64ea82f6e29062b3d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3637440454398172173
 GameObject:
   m_ObjectHideFlags: 0
@@ -3165,7 +2805,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7341427179910836501}
-  - component: {fileID: 5090125037596607661}
   m_Layer: 0
   m_Name: Hair_Side_L_01
   m_TagString: Untagged
@@ -3189,37 +2828,6 @@ Transform:
   - {fileID: 422942899036161449}
   m_Father: {fileID: 1647372619036039955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5090125037596607661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3637440454398172173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 1647372619036039955}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &3639007251242924896
 GameObject:
   m_ObjectHideFlags: 0
@@ -3260,7 +2868,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6394241537713028347}
-  - component: {fileID: 998606413286629909}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_L_01
   m_TagString: Untagged
@@ -3284,41 +2891,6 @@ Transform:
   - {fileID: 625745637268960157}
   m_Father: {fileID: 6212374840354540767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &998606413286629909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3673534968719960291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 65
-  dragForce: 0.891
-  springForce: {x: 0, y: -5, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6212374840354540767}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -122
-    max: 124
-  zAngleLimits:
-    active: 1
-    min: -67.2
-    max: 67.2
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 5952531313184176888}
-  - {fileID: 5691965459660197178}
-  - {fileID: 6652806499788722572}
-  - {fileID: 49301782446749434}
-  panelColliders: []
 --- !u!1 &3690304742136515665
 GameObject:
   m_ObjectHideFlags: 0
@@ -3495,7 +3067,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4192009978408333525}
-  - component: {fileID: 6071827038843361906}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_R_02
   m_TagString: Untagged
@@ -3519,41 +3090,6 @@ Transform:
   - {fileID: 2325124740049851281}
   m_Father: {fileID: 3844218848523275394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6071827038843361906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4116999114933320731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 0
-  dragForce: 0.377
-  springForce: {x: 0, y: 0, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 3844218848523275394}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -123.6
-    max: 123.6
-  zAngleLimits:
-    active: 1
-    min: -121.9
-    max: 121.9
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  panelColliders: []
 --- !u!1 &4182220328664304919
 GameObject:
   m_ObjectHideFlags: 0
@@ -3563,7 +3099,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1466577509828275352}
-  - component: {fileID: 9177226480238114965}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_R_00
   m_TagString: Untagged
@@ -3585,43 +3120,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3844218848523275394}
-  m_Father: {fileID: 4767254507883957999}
+  m_Father: {fileID: 2317419377173530740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9177226480238114965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4182220328664304919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 188
-  dragForce: 0.865
-  springForce: {x: 0, y: 0, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6147753019550113910}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -75
-    max: 86.5
-  zAngleLimits:
-    active: 1
-    min: -43.6
-    max: 45.6
-  lengthLimitTargets: []
-  radius: 0.1
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 5952531313184176888}
-  - {fileID: 5691965459660197178}
-  - {fileID: 6652806499788722572}
-  - {fileID: 49301782446749434}
-  panelColliders: []
 --- !u!1 &4182993258727744974
 GameObject:
   m_ObjectHideFlags: 0
@@ -3631,7 +3131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3746249748815153853}
-  - component: {fileID: 1370928357314641896}
   m_Layer: 0
   m_Name: Skirt_SideL_00
   m_TagString: Untagged
@@ -3655,39 +3154,6 @@ Transform:
   - {fileID: 6261468909804585223}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1370928357314641896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4182993258727744974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 590
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 4530230503287420793}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -15.8
-    max: 54.2
-  zAngleLimits:
-    active: 1
-    min: -58
-    max: 23.5
-  lengthLimitTargets: []
-  radius: 0.01
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &4194196392633426679
 GameObject:
   m_ObjectHideFlags: 0
@@ -3697,7 +3163,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3554238708136774263}
-  - component: {fileID: 107076286352066514}
   m_Layer: 0
   m_Name: Accessory_00_rig_02
   m_TagString: Untagged
@@ -3721,37 +3186,6 @@ Transform:
   - {fileID: 7343905447955576}
   m_Father: {fileID: 819300236648241918}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &107076286352066514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4194196392633426679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &4248046433387143918
 GameObject:
   m_ObjectHideFlags: 0
@@ -3812,38 +3246,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4767254507883957999}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4434188483819142501
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5259961412541374974}
-  m_Layer: 0
-  m_Name: Prop_L
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5259961412541374974
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4434188483819142501}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6262968391853843494}
+  m_Father: {fileID: 2317419377173530740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4443018024046761747
 GameObject:
@@ -3876,7 +3279,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1255215767094845348}
-  - {fileID: 4785978606265335546}
+  - {fileID: 3767783073812226616}
   m_Father: {fileID: 5516395357131818663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4277978060263045526
@@ -3904,12 +3307,12 @@ MonoBehaviour:
   collideWithGround: 0
   groundHeight: 0
   springBones:
-  - {fileID: 539820516494119352}
-  - {fileID: 6029999358008677819}
-  - {fileID: 4081166226030443420}
-  - {fileID: 1502354486312277022}
-  - {fileID: 5090125037596607661}
-  - {fileID: 7419658321280745851}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   boneColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colliderColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
@@ -3956,7 +3359,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6011140778449444992}
-  - component: {fileID: 632823255304106672}
   m_Layer: 0
   m_Name: Accessory_SpineRibbon_00
   m_TagString: Untagged
@@ -3980,37 +3382,6 @@ Transform:
   - {fileID: 6160775506137355459}
   m_Father: {fileID: 6397426210091828433}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &632823255304106672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4532766029980572953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 426
-  dragForce: 0.852
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6397426210091828433}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: -180
-    max: 92.3
-  zAngleLimits:
-    active: 0
-    min: -49.6
-    max: 49.6
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &4646854008107894903
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,7 +3528,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4421020515644329277}
-  - component: {fileID: 1322179243449257600}
   m_Layer: 0
   m_Name: Skirt_Back_R_00
   m_TagString: Untagged
@@ -4181,39 +3551,6 @@ Transform:
   - {fileID: 4321909084622802072}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1322179243449257600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4666344254835065772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 570
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 2136158488661862426}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -101.8
-    max: 11.2
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.04
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &4666985684766720798
 GameObject:
   m_ObjectHideFlags: 0
@@ -4276,43 +3613,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5084209275570234798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4833935221411296449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4785978606265335546}
-  m_Layer: 0
-  m_Name: root_head
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4785978606265335546
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4833935221411296449}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5016003e-10, y: -0.0000045013426, z: -0.0000035381315}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2845415379632762765}
-  - {fileID: 1647372619036039955}
-  - {fileID: 314342046268913411}
-  - {fileID: 6912081421894266486}
-  - {fileID: 8877237711087054756}
-  - {fileID: 4833203703632432224}
-  m_Father: {fileID: 7597630290376778042}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4936041331550476441
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,7 +3653,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 819300236648241918}
-  - component: {fileID: 7817423377806466486}
   m_Layer: 0
   m_Name: Accessory_00_rig_01
   m_TagString: Untagged
@@ -4377,37 +3676,6 @@ Transform:
   - {fileID: 3554238708136774263}
   m_Father: {fileID: 204272431933068721}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7817423377806466486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4952590189787711796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &5006698271633240869
 GameObject:
   m_ObjectHideFlags: 0
@@ -4643,7 +3911,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6289390971876779281}
-  - component: {fileID: 971296011280017801}
   m_Layer: 0
   m_Name: Accessory_00_rig_06
   m_TagString: Untagged
@@ -4667,37 +3934,6 @@ Transform:
   - {fileID: 137268708317190589}
   m_Father: {fileID: 3793639034441832028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &971296011280017801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5061188975669366499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &5076298486872882039
 GameObject:
   m_ObjectHideFlags: 0
@@ -4770,7 +4006,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3302269659969563353}
-  - component: {fileID: 7725997324384066414}
   m_Layer: 0
   m_Name: Upper_Leg_R CapsuleCollider
   m_TagString: Untagged
@@ -4793,22 +4028,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2202122601769945896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7725997324384066414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5119436455463339020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.12
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &5270635010058021414
 GameObject:
   m_ObjectHideFlags: 0
@@ -4818,7 +4037,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 625745637268960157}
-  - component: {fileID: 2024943365658361148}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_L_02
   m_TagString: Untagged
@@ -4842,41 +4060,6 @@ Transform:
   - {fileID: 2654534730268746942}
   m_Father: {fileID: 6394241537713028347}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2024943365658361148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270635010058021414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 0
-  dragForce: 0.377
-  springForce: {x: 0, y: 0, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6394241537713028347}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -123.6
-    max: 123.6
-  zAngleLimits:
-    active: 1
-    min: -121.9
-    max: 121.9
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  panelColliders: []
 --- !u!1 &5275712144925271189
 GameObject:
   m_ObjectHideFlags: 0
@@ -5077,7 +4260,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6212374840354540767}
-  - component: {fileID: 6953289081350365714}
   m_Layer: 0
   m_Name: Hair_DownTwinTail_L_00
   m_TagString: Untagged
@@ -5099,43 +4281,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6394241537713028347}
-  m_Father: {fileID: 4767254507883957999}
+  m_Father: {fileID: 2317419377173530740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6953289081350365714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5540488305467745676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 188
-  dragForce: 0.865
-  springForce: {x: 0, y: 0, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 3904858413810793733}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -75
-    max: 86.5
-  zAngleLimits:
-    active: 1
-    min: -43.6
-    max: 45.6
-  lengthLimitTargets: []
-  radius: 0.1
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 5952531313184176888}
-  - {fileID: 5691965459660197178}
-  - {fileID: 6652806499788722572}
-  - {fileID: 49301782446749434}
-  panelColliders: []
 --- !u!1 &5641128044252355063
 GameObject:
   m_ObjectHideFlags: 0
@@ -5176,7 +4323,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2136158488661862426}
-  - component: {fileID: 9037956143835402777}
   m_Layer: 0
   m_Name: SpringPivot_Skirt_Back_R_00
   m_TagString: Untagged
@@ -5199,18 +4345,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2202122601769945896}
   m_LocalEulerAnglesHint: {x: 168.439, y: 3.6569977, z: -36.98999}
---- !u!114 &9037956143835402777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5673948589474320000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625e9c3b94e3dc64ea82f6e29062b3d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5776224276290707390
 GameObject:
   m_ObjectHideFlags: 0
@@ -5242,41 +4376,6 @@ Transform:
   m_Children:
   - {fileID: 5514305662938331880}
   m_Father: {fileID: 6262968391853843494}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5810374787103590936
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4767254507883957999}
-  m_Layer: 0
-  m_Name: root_head
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4767254507883957999
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5810374787103590936}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5016003e-10, y: -0.0000045013426, z: -0.0000035381315}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6212374840354540767}
-  - {fileID: 1466577509828275352}
-  - {fileID: 3904858413810793733}
-  - {fileID: 6147753019550113910}
-  m_Father: {fileID: 8913379652662121099}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5933244818130256141
 GameObject:
@@ -5440,7 +4539,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6811431111854435072}
-  - {fileID: 3767783073812226616}
+  - {fileID: 5232204067247914543}
   m_Father: {fileID: 5516395357131818663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5404114360263553906
@@ -5468,12 +4567,12 @@ MonoBehaviour:
   collideWithGround: 0
   groundHeight: 0
   springBones:
-  - {fileID: 7817423377806466486}
-  - {fileID: 6249680480362600580}
-  - {fileID: 107076286352066514}
-  - {fileID: 971296011280017801}
-  - {fileID: 2748336501830501714}
-  - {fileID: 319781873069137683}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   boneColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colliderColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
@@ -6030,7 +5129,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2057922118640769438}
-  - component: {fileID: 5691965459660197178}
   m_Layer: 0
   m_Name: Upper_Arm_LCapsuleCollider
   m_TagString: Untagged
@@ -6053,22 +5151,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8300678136458577718}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &5691965459660197178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6777117970640066037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.05
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6781531600725969094
 GameObject:
   m_ObjectHideFlags: 0
@@ -6078,7 +5160,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4332906970653987319}
-  - component: {fileID: 7401949125601044522}
   m_Layer: 0
   m_Name: Skirt_Front_L_01
   m_TagString: Untagged
@@ -6102,39 +5183,6 @@ Transform:
   - {fileID: 6647245594803410675}
   m_Father: {fileID: 6994829568197102537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7401949125601044522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6781531600725969094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 343
-  dragForce: 0.889
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6994829568197102537}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -7.4
-    max: 8.9
-  zAngleLimits:
-    active: 1
-    min: -26.6
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.04
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &6782042073005057840
 GameObject:
   m_ObjectHideFlags: 0
@@ -6259,7 +5307,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1180774887760833629}
-  - {fileID: 4767254507883957999}
+  - {fileID: 2317419377173530740}
   - {fileID: 8532445482236003934}
   m_Father: {fileID: 5516395357131818663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6288,12 +5336,12 @@ MonoBehaviour:
   collideWithGround: 0
   groundHeight: 0
   springBones:
-  - {fileID: 6953289081350365714}
-  - {fileID: 9177226480238114965}
-  - {fileID: 998606413286629909}
-  - {fileID: 589138511261632685}
-  - {fileID: 2024943365658361148}
-  - {fileID: 6071827038843361906}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   boneColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colliderColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
@@ -6374,7 +5422,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2633497656496504965}
-  - component: {fileID: 6652806499788722572}
   m_Layer: 0
   m_Name: Lower_Arm_RCapsuleCollider
   m_TagString: Untagged
@@ -6397,22 +5444,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2298324047172747735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &6652806499788722572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7303341789815112694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.05
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &7443465086937013830
 GameObject:
   m_ObjectHideFlags: 0
@@ -6496,18 +5527,18 @@ MonoBehaviour:
   collideWithGround: 1
   groundHeight: -0.15
   springBones:
-  - {fileID: 1567799180854864218}
-  - {fileID: 1322179243449257600}
-  - {fileID: 6349313107880903662}
-  - {fileID: 2066965490651962718}
-  - {fileID: 1370928357314641896}
-  - {fileID: 8124512659850737573}
-  - {fileID: 3855491288315183846}
-  - {fileID: 7253732490346022028}
-  - {fileID: 7401949125601044522}
-  - {fileID: 7880146921113888377}
-  - {fileID: 4541807138593645024}
-  - {fileID: 5189865482021872612}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   boneColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colliderColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
@@ -6553,7 +5584,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 137268708317190589}
-  - component: {fileID: 319781873069137683}
   m_Layer: 0
   m_Name: Accessory_00_rig_07
   m_TagString: Untagged
@@ -6577,37 +5607,6 @@ Transform:
   - {fileID: 8452152870210142332}
   m_Father: {fileID: 6289390971876779281}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &319781873069137683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7528707449497394362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &7559861144875668041
 GameObject:
   m_ObjectHideFlags: 0
@@ -6617,7 +5616,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3422232603451118728}
-  - component: {fileID: 8325272294909513449}
   m_Layer: 0
   m_Name: Upper_Leg_L CapsuleCollider
   m_TagString: Untagged
@@ -6640,22 +5638,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5185518375418614577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8325272294909513449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7559861144875668041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.12
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &7590674664666925765
 GameObject:
   m_ObjectHideFlags: 0
@@ -6718,6 +5700,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3267523270510316649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7656111698967274306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2317419377173530740}
+  m_Layer: 0
+  m_Name: root_head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2317419377173530740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7656111698967274306}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5016003e-10, y: -0.0000045013426, z: -0.0000035381315}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6212374840354540767}
+  - {fileID: 1466577509828275352}
+  - {fileID: 3904858413810793733}
+  - {fileID: 6147753019550113910}
+  m_Father: {fileID: 8913379652662121099}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7657767207617856648
 GameObject:
   m_ObjectHideFlags: 0
@@ -6727,7 +5744,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6994829568197102537}
-  - component: {fileID: 6349313107880903662}
   m_Layer: 0
   m_Name: Skirt_Front_L_00
   m_TagString: Untagged
@@ -6751,39 +5767,6 @@ Transform:
   - {fileID: 4332906970653987319}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6349313107880903662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7657767207617856648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 254
-  dragForce: 0.889
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 2755852847003040355}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -28.9
-    max: 49.9
-  zAngleLimits:
-    active: 1
-    min: -18.4
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.015
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &7697981866155512090
 GameObject:
   m_ObjectHideFlags: 0
@@ -6888,7 +5871,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6020031518801830905}
-  - component: {fileID: 1567799180854864218}
   m_Layer: 0
   m_Name: Skirt_Back_L_00
   m_TagString: Untagged
@@ -6912,39 +5894,6 @@ Transform:
   - {fileID: 1687869576731534753}
   m_Father: {fileID: 2803395102676885008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1567799180854864218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7779146075758319622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 570
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 7680566394639373408}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -101.8
-    max: 11.2
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.04
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &7801512020231602818
 GameObject:
   m_ObjectHideFlags: 0
@@ -7084,7 +6033,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1687869576731534753}
-  - component: {fileID: 3855491288315183846}
   m_Layer: 0
   m_Name: Skirt_Back_L_01
   m_TagString: Untagged
@@ -7108,39 +6056,6 @@ Transform:
   - {fileID: 6248398931556731259}
   m_Father: {fileID: 6020031518801830905}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3855491288315183846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7932494832155446613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 570
-  dragForce: 0.897
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 6020031518801830905}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.02
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &7937302705061751556
 GameObject:
   m_ObjectHideFlags: 0
@@ -7228,7 +6143,7 @@ SkinnedMeshRenderer:
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -7066848086114522073, guid: 2e82b72d6ee6004469434238fcc4887a, type: 3}
   m_Bones:
-  - {fileID: 4767254507883957999}
+  - {fileID: 2317419377173530740}
   - {fileID: 6212374840354540767}
   - {fileID: 6394241537713028347}
   - {fileID: 1466577509828275352}
@@ -7236,7 +6151,7 @@ SkinnedMeshRenderer:
   - {fileID: 3844218848523275394}
   - {fileID: 4192009978408333525}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 4767254507883957999}
+  m_RootBone: {fileID: 2317419377173530740}
   m_AABB:
     m_Center: {x: 0.12536567, y: -0.20445535, z: -0.0000012516975}
     m_Extent: {x: 0.47821146, y: 0.30562553, z: 0.46007082}
@@ -7281,7 +6196,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 314342046268913411}
-  - component: {fileID: 4081166226030443420}
   m_Layer: 0
   m_Name: Hair_Side_R_00
   m_TagString: Untagged
@@ -7303,39 +6217,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7708955039591883355}
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4081166226030443420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8603928443525125785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 783
-  dragForce: 0.847
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 4833203703632432224}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -32.5
-    max: 0
-  zAngleLimits:
-    active: 1
-    min: -33.9
-    max: 27.7
-  lengthLimitTargets: []
-  radius: 0
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &8624555263547937601
 GameObject:
   m_ObjectHideFlags: 0
@@ -7345,7 +6228,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4042304651926046849}
-  - component: {fileID: 49301782446749434}
   m_Layer: 0
   m_Name: Upper_Arm_RCapsuleCollider
   m_TagString: Untagged
@@ -7368,22 +6250,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2690857944263699219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &49301782446749434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8624555263547937601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f228c6e846db8bd4ca8c289bdb7565b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.05
-  height: 0.05
-  linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 0
 --- !u!1 &8626016355765234800
 GameObject:
   m_ObjectHideFlags: 0
@@ -7490,7 +6356,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377080827301201767}
-  - component: {fileID: 7880146921113888377}
   m_Layer: 0
   m_Name: Skirt_Front_R_01
   m_TagString: Untagged
@@ -7514,39 +6379,6 @@ Transform:
   - {fileID: 5468924270463693006}
   m_Father: {fileID: 7877242641715178277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7880146921113888377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8669123635457573164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 343
-  dragForce: 0.889
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 7877242641715178277}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 1
-    min: -7.4
-    max: 8.9
-  zAngleLimits:
-    active: 1
-    min: -0
-    max: 26.6
-  lengthLimitTargets: []
-  radius: 0.04
-  sphereColliders: []
-  capsuleColliders:
-  - {fileID: 8325272294909513449}
-  - {fileID: 7725997324384066414}
-  panelColliders: []
 --- !u!1 &8704330811097455745
 GameObject:
   m_ObjectHideFlags: 0
@@ -7644,7 +6476,7 @@ Transform:
   m_Children:
   - {fileID: 819300236648241918}
   - {fileID: 3793639034441832028}
-  m_Father: {fileID: 3767783073812226616}
+  m_Father: {fileID: 5232204067247914543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8866437118001755344
 GameObject:
@@ -7765,7 +6597,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4785978606265335546}
+  m_Father: {fileID: 3767783073812226616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8937684150902857474
 GameObject:
@@ -7776,7 +6608,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3956371090553637076}
-  - component: {fileID: 4065997537388037943}
   m_Layer: 0
   m_Name: SpringPivot_Skirt_Front_R_00
   m_TagString: Untagged
@@ -7799,18 +6630,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2202122601769945896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4065997537388037943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8937684150902857474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625e9c3b94e3dc64ea82f6e29062b3d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8961737728133304399
 GameObject:
   m_ObjectHideFlags: 0
@@ -7854,7 +6673,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3793639034441832028}
-  - component: {fileID: 6249680480362600580}
   m_Layer: 0
   m_Name: Accessory_00_rig_05
   m_TagString: Untagged
@@ -7878,37 +6696,6 @@ Transform:
   - {fileID: 6289390971876779281}
   m_Father: {fileID: 204272431933068721}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6249680480362600580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9187509113297086300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stiffnessForce: 1266
-  dragForce: 0.89
-  springForce: {x: 0, y: -0.0001, z: 0}
-  windInfluence: 1
-  pivotNode: {fileID: 0}
-  angularStiffness: 100
-  yAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  zAngleLimits:
-    active: 0
-    min: 0
-    max: 0
-  lengthLimitTargets: []
-  radius: 0.05
-  sphereColliders: []
-  capsuleColliders: []
-  panelColliders: []
 --- !u!1 &9206886538876635383
 GameObject:
   m_ObjectHideFlags: 0
@@ -7938,5 +6725,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4767254507883957999}
+  m_Father: {fileID: 2317419377173530740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

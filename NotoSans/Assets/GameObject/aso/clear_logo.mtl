@@ -1,0 +1,5 @@
+newmtl ClearLogoBase
+Kd 1 1 1
+
+newmtl ClearLogoText
+Kd 1 1 1

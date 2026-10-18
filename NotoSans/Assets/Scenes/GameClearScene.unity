@@ -816,6 +816,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808801470}
   m_CullTransparentMesh: 1
+--- !u!1 &5510001000000000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5510001000000000002}
+  - component: {fileID: 5510001000000000003}
+  m_Layer: 0
+  m_Name: UplightEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5510001000000000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5510001000000000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3.3, z: -2.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5510001000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5510001000000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45c51060ba747bbac89d7b9a13c7b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UplightEffect
+  k_RayCount: 9
+  k_RayLength: 10
+  k_RayWidth: 1.5
+  k_SpreadDegrees: 38
+  k_PulsePeriod: 3
+  k_RayColor: {r: 1, g: 0.93, b: 0.62, a: 1}
+  k_AddLight: 1
+  k_LightOffset: {x: 0, y: 3, z: -2.2}
+  k_LightColor: {r: 1, g: 0.86, b: 0.5, a: 1}
+  k_LightIntensity: 5
+  k_LightRange: 14
 --- !u!1 &7710001000000000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,7 +1072,7 @@ MeshRenderer:
   m_GameObject: {fileID: 8810001000000000001}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -1034,6 +1089,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4d74fd6c1eb643c39289ca6963a72433, type: 2}
+  - {fileID: 2100000, guid: ca5e7746e6244b04b1291b4f2a7f35d0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1074,61 +1130,6 @@ MonoBehaviour:
   k_YawPeriod: 4
   k_BobAmplitude: 0.08
   k_BobPeriod: 2.5
---- !u!1 &5510001000000000001
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5510001000000000002}
-  - component: {fileID: 5510001000000000003}
-  m_Layer: 0
-  m_Name: UplightEffect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5510001000000000002
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510001000000000001}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.3, z: -2.6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5510001000000000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5510001000000000001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e45c51060ba747bbac89d7b9a13c7b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UplightEffect
-  k_RayCount: 9
-  k_RayLength: 10
-  k_RayWidth: 1.5
-  k_SpreadDegrees: 38
-  k_PulsePeriod: 3
-  k_RayColor: {r: 1, g: 0.93, b: 0.62, a: 1}
-  k_AddLight: 1
-  k_LightOffset: {x: 0, y: 3, z: -2.2}
-  k_LightColor: {r: 1, g: 0.86, b: 0.5, a: 1}
-  k_LightIntensity: 5
-  k_LightRange: 14
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -21,17 +21,23 @@ public static class ClearLogoGen
     static readonly Color Navy = Color.FromArgb(255, 16, 24, 64);
     static readonly Color Cream = Color.FromArgb(255, 255, 246, 214);
 
-    public static void Run(string fontPath, string pngPath, string objPath, bool flipX)
+    // 文字だけを前に飛び出させる量（ロゴ全体の板の前面から、さらに前へ）
+    const float TextPop = 0.14f;
+
+    public static void Run(string fontPath, string pngPath, string textPngPath, string objPath, bool flipX)
     {
-        Bitmap bmp = DrawLogo(fontPath);
+        Bitmap bmp = DrawLogo(fontPath, false);
+        Bitmap textBmp = DrawLogo(fontPath, true);
         bmp.Save(pngPath, ImageFormat.Png);
-        BuildMesh(bmp, objPath, flipX);
+        textBmp.Save(textPngPath, ImageFormat.Png);
+        BuildMesh(bmp, textBmp, objPath, flipX);
         bmp.Dispose();
+        textBmp.Dispose();
     }
 
     // ------------------------------------------------------------ 画像
 
-    static Bitmap DrawLogo(string fontPath)
+    static Bitmap DrawLogo(string fontPath, bool textOnly)
     {
         Bitmap bmp = new Bitmap(W, H, PixelFormat.Format32bppArgb);
         Graphics g = Graphics.FromImage(bmp);
@@ -48,20 +54,25 @@ public static class ClearLogoGen
         float cy = TOP + (H - TOP) / 2.0f;
         Random rand = new Random(20261018);
 
-        DrawBurst(g, cx, cy, 930.0f, 420.0f, rand);
+        if (!textOnly) { DrawBurst(g, cx, cy, 930.0f, 420.0f, rand); }
 
         // 派手さを足す飾り（文字の後ろ）
-        DrawArrowArc(g, 245.0f, 585.0f, 150.0f, 245.0f, 105.0f, 150.0f, false);
-        DrawArrowArc(g, 1805.0f, 470.0f, 150.0f, 245.0f, -75.0f, 150.0f, false);
-        // 紙吹雪は文字の後ろ（文字に重ならないように）
-        DrawConfetti(g, rand);
+        if (!textOnly)
+        {
+            DrawArrowArc(g, 245.0f, 585.0f, 150.0f, 245.0f, 105.0f, 150.0f, false);
+            DrawArrowArc(g, 1805.0f, 470.0f, 150.0f, 245.0f, -75.0f, 150.0f, false);
+            // 紙吹雪は文字の後ろ（文字に重ならないように）
+            DrawConfetti(g, rand);
+        }
 
         // 文字：上の行は青、下の行は大きく橙
         DrawTextLine(g, family, "ゲーム", cx, 295.0f, 800.0f, -4.0f,
-            Color.FromArgb(255, 205, 248, 255), Color.FromArgb(255, 95, 205, 248), Color.FromArgb(255, 36, 112, 226), Color.FromArgb(255, 20, 70, 170));
+            Color.FromArgb(255, 205, 248, 255), Color.FromArgb(255, 95, 205, 248), Color.FromArgb(255, 36, 112, 226), Color.FromArgb(255, 20, 70, 170), !textOnly);
         DrawTextLine(g, family, "クリアー！", cx, 660.0f, 1580.0f, -4.0f,
-            Color.FromArgb(255, 255, 244, 120), Color.FromArgb(255, 255, 168, 36), Color.FromArgb(255, 232, 76, 20), Color.FromArgb(255, 170, 40, 10));
+            Color.FromArgb(255, 255, 244, 120), Color.FromArgb(255, 255, 168, 36), Color.FromArgb(255, 232, 76, 20), Color.FromArgb(255, 170, 40, 10), !textOnly);
 
+        if (!textOnly)
+        {
         // 星・キラキラ・紙吹雪
         DrawStar(g, 205.0f, 240.0f, 105.0f, -15.0f);
         DrawStar(g, 1850.0f, 215.0f, 125.0f, 12.0f);
@@ -76,6 +87,7 @@ public static class ClearLogoGen
         DrawSparkle(g, 1010.0f, 100.0f, 50.0f);
         DrawSparkle(g, 1230.0f, 960.0f, 52.0f);
         DrawSparkle(g, 880.0f, 955.0f, 44.0f);
+        }
 
         g.ResetClip();
         // 上の帯（モデルの側面の色）
@@ -130,7 +142,7 @@ public static class ClearLogoGen
 
     // 縁取りつきの文字1行。幅は targetWidth に合わせる
     static void DrawTextLine(Graphics g, FontFamily family, string text, float cx, float cy, float targetWidth, float rotation,
-        Color top, Color mid, Color bottom, Color innerEdge)
+        Color top, Color mid, Color bottom, Color innerEdge, bool withShadow)
     {
         GraphicsPath path = new GraphicsPath();
         path.AddString(text, family, (int)FontStyle.Regular, 300.0f, new PointF(0, 0), StringFormat.GenericTypographic);
@@ -149,7 +161,7 @@ public static class ClearLogoGen
         Matrix move = new Matrix();
         move.Translate(0.0f, 16.0f);
         shadow.Transform(move);
-        g.DrawPath(RoundPen(Color.FromArgb(255, 8, 12, 40), 40.0f), shadow);
+        if (withShadow) { g.DrawPath(RoundPen(Color.FromArgb(255, 8, 12, 40), 40.0f), shadow); }
         g.DrawPath(RoundPen(Cream, 62.0f), path);
         g.DrawPath(RoundPen(Navy, 38.0f), path);
 
@@ -285,12 +297,14 @@ public static class ClearLogoGen
 
     // ------------------------------------------------------------ 3Dモデル
 
-    static void BuildMesh(Bitmap bmp, string objPath, bool flipX)
+    const int Cell = 4;
+
+    // 不透明な部分の輪郭を、つながった輪（格子の座標）として取り出す。内側が進行方向の左（画面は y が下向き）
+    static List<List<PointF>> ExtractLoops(Bitmap bmp)
     {
-        // 1) 不透明な部分を、4×4ピクセルごとの平均で粗い格子にする（まわりに空白の1マスを足す）
-        int cell = 4;
-        int gw = W / cell + 2;
-        int gh = (H - TOP) / cell + 2;
+        // 4×4ピクセルごとの平均で粗い格子にする（まわりに空白の1マスを足す）
+        int gw = W / Cell + 2;
+        int gh = (H - TOP) / Cell + 2;
         float[,] v = new float[gw, gh];
         BitmapData data = bmp.LockBits(new Rectangle(0, 0, W, H), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         byte[] raw = new byte[data.Stride * H];
@@ -300,21 +314,21 @@ public static class ClearLogoGen
             for (int gx = 0; gx < gw - 2; gx++)
             {
                 int sum = 0;
-                for (int dy = 0; dy < cell; dy++)
+                for (int dy = 0; dy < Cell; dy++)
                 {
-                    for (int dx = 0; dx < cell; dx++)
+                    for (int dx = 0; dx < Cell; dx++)
                     {
-                        int px = gx * cell + dx;
-                        int py = TOP + gy * cell + dy;
+                        int px = gx * Cell + dx;
+                        int py = TOP + gy * Cell + dy;
                         sum += raw[py * data.Stride + px * 4 + 3];
                     }
                 }
-                v[gx + 1, gy + 1] = sum / (255.0f * cell * cell);
+                v[gx + 1, gy + 1] = sum / (255.0f * Cell * Cell);
             }
         }
         bmp.UnlockBits(data);
 
-        // 2) マーチングスクエアで輪郭をたどる（内側が進行方向の左：画面は y が下向き）
+        // マーチングスクエアで輪郭をたどる
         Dictionary<int, PointF> points = new Dictionary<int, PointF>();
         Dictionary<int, int> next = new Dictionary<int, int>();
         for (int y = 0; y < gh - 1; y++)
@@ -357,7 +371,7 @@ public static class ClearLogoGen
             }
         }
 
-        // 3) つながった輪にして、簡略化する
+        // つながった輪にして、簡略化する
         HashSet<int> visited = new HashSet<int>();
         List<List<PointF>> loops = new List<List<PointF>>();
         foreach (int start in new List<int>(next.Keys))
@@ -380,31 +394,13 @@ public static class ClearLogoGen
             List<PointF> simple = SimplifyClosed(loop, 0.8f);
             if (simple.Count >= 4 && Perimeter(simple) > 14.0f) { loops.Add(simple); }
         }
+        return loops;
+    }
 
-        // 4) OBJ に書き出す
-        List<float[]> positions = new List<float[]>();
-        List<float[]> uvs = new List<float[]>();
-        List<float[]> normals = new List<float[]>();
-        StringBuilder faces = new StringBuilder();
-
-        float sideU = 0.5f;
-        float sideV = 1.0f - 16.5f / H;
-        float vMax = (H - TOP) / (float)H;
-        float halfHeight = (H - TOP) / (float)W * WorldWidth * 0.5f;
-        float halfWidth = WorldWidth * 0.5f;
-        float sx = flipX ? -1.0f : 1.0f;
-
-        // 前（-Z を向く）と後ろ（+Z を向く）の板：四角1枚ずつ。画像の透明部分は、素材のアルファで切り抜く
-        AddQuad(positions, uvs, normals, faces,
-            new float[] { -halfWidth, -halfHeight, -HalfThickness }, new float[] { halfWidth, -halfHeight, -HalfThickness },
-            new float[] { halfWidth, halfHeight, -HalfThickness }, new float[] { -halfWidth, halfHeight, -HalfThickness },
-            new float[] { 0, 0 }, new float[] { 1, 0 }, new float[] { 1, vMax }, new float[] { 0, vMax }, new float[] { 0, 0, -1 }, sx);
-        AddQuad(positions, uvs, normals, faces,
-            new float[] { halfWidth, -halfHeight, HalfThickness }, new float[] { -halfWidth, -halfHeight, HalfThickness },
-            new float[] { -halfWidth, halfHeight, HalfThickness }, new float[] { halfWidth, halfHeight, HalfThickness },
-            new float[] { 0, 0 }, new float[] { 1, 0 }, new float[] { 1, vMax }, new float[] { 0, vMax }, new float[] { 0, 0, 1 }, sx);
-
-        // 側面：輪郭に沿って、前の板と後ろの板をつなぐ
+    // 1つの輪の外側に、前の面（zA）と後ろの面（zB）をつなぐ側面を張る
+    static int AddLoopSides(List<List<PointF>> loops, List<float[]> positions, List<float[]> uvs, List<float[]> normals, StringBuilder faces,
+        float zA, float zB, float sideU, float sideV, float sx)
+    {
         int segmentCount = 0;
         foreach (List<PointF> loop in loops)
         {
@@ -413,8 +409,8 @@ public static class ClearLogoGen
             for (int i = 0; i < n; i++)
             {
                 // 格子の座標 → ピクセル（マスの中心）→ ワールド（y は上向き）
-                float px = (loop[i].X - 1.0f) * cell + cell * 0.5f;
-                float py = (loop[i].Y - 1.0f) * cell + cell * 0.5f;
+                float px = (loop[i].X - 1.0f) * Cell + Cell * 0.5f;
+                float py = (loop[i].Y - 1.0f) * Cell + Cell * 0.5f;
                 world[i] = new float[] { (px - W * 0.5f) / W * WorldWidth, -(py - (H - TOP) * 0.5f) / W * WorldWidth };
             }
             // 各辺の外向きの法線（進行方向の右）
@@ -432,24 +428,65 @@ public static class ClearLogoGen
                 int j = (i + 1) % n;
                 float[] n0 = SmoothNormal(edgeNormal[(i + n - 1) % n], edgeNormal[i]);
                 float[] n1 = SmoothNormal(edgeNormal[i], edgeNormal[j]);
-                AddSideQuad(positions, uvs, normals, faces, world[i], world[j], n0, n1, sideU, sideV, sx);
+                AddSideQuad(positions, uvs, normals, faces, world[i], world[j], n0, n1, zA, zB, sideU, sideV, sx);
                 segmentCount++;
             }
         }
+        return segmentCount;
+    }
+
+    static void BuildMesh(Bitmap bmp, Bitmap textBmp, string objPath, bool flipX)
+    {
+        List<float[]> positions = new List<float[]>();
+        List<float[]> uvs = new List<float[]>();
+        List<float[]> normals = new List<float[]>();
+        StringBuilder baseFaces = new StringBuilder();
+        StringBuilder textFaces = new StringBuilder();
+
+        float sideU = 0.5f;
+        float sideV = 1.0f - 16.5f / H;
+        float vMax = (H - TOP) / (float)H;
+        float halfHeight = (H - TOP) / (float)W * WorldWidth * 0.5f;
+        float halfWidth = WorldWidth * 0.5f;
+        float sx = flipX ? -1.0f : 1.0f;
+        float zText = -(HalfThickness + TextPop);
+
+        // ロゴ全体の板：前（-Z を向く）と後ろ（+Z を向く）の板を四角1枚ずつ。画像の透明部分は、素材のアルファで切り抜く
+        AddQuad(positions, uvs, normals, baseFaces,
+            new float[] { -halfWidth, -halfHeight, -HalfThickness }, new float[] { halfWidth, -halfHeight, -HalfThickness },
+            new float[] { halfWidth, halfHeight, -HalfThickness }, new float[] { -halfWidth, halfHeight, -HalfThickness },
+            new float[] { 0, 0 }, new float[] { 1, 0 }, new float[] { 1, vMax }, new float[] { 0, vMax }, new float[] { 0, 0, -1 }, sx);
+        AddQuad(positions, uvs, normals, baseFaces,
+            new float[] { halfWidth, -halfHeight, HalfThickness }, new float[] { -halfWidth, -halfHeight, HalfThickness },
+            new float[] { -halfWidth, halfHeight, HalfThickness }, new float[] { halfWidth, halfHeight, HalfThickness },
+            new float[] { 0, 0 }, new float[] { 1, 0 }, new float[] { 1, vMax }, new float[] { 0, vMax }, new float[] { 0, 0, 1 }, sx);
+        int baseSegments = AddLoopSides(ExtractLoops(bmp), positions, uvs, normals, baseFaces, -HalfThickness, HalfThickness, sideU, sideV, sx);
+
+        // 文字だけの層：ロゴ全体の板の前面から、さらに前へ飛び出す。前の面は文字の画像（切り抜き）、側面は濃い紺
+        AddQuad(positions, uvs, normals, textFaces,
+            new float[] { -halfWidth, -halfHeight, zText }, new float[] { halfWidth, -halfHeight, zText },
+            new float[] { halfWidth, halfHeight, zText }, new float[] { -halfWidth, halfHeight, zText },
+            new float[] { 0, 0 }, new float[] { 1, 0 }, new float[] { 1, vMax }, new float[] { 0, vMax }, new float[] { 0, 0, -1 }, sx);
+        // 後ろ端は、ロゴ全体の板の中に少しもぐらせて、すき間が見えないようにする
+        int textSegments = AddLoopSides(ExtractLoops(textBmp), positions, uvs, normals, textFaces, zText, -HalfThickness + 0.004f, sideU, sideV, sx);
 
         StringBuilder obj = new StringBuilder();
         obj.AppendLine("# ClearLogo (generated)");
+        obj.AppendLine("mtllib clear_logo.mtl");
         obj.AppendLine("o ClearLogo");
         CultureInfo ci = CultureInfo.InvariantCulture;
         foreach (float[] p in positions) { obj.AppendLine("v " + (p[0] * sx).ToString("0.######", ci) + " " + p[1].ToString("0.######", ci) + " " + p[2].ToString("0.######", ci)); }
         foreach (float[] t in uvs) { obj.AppendLine("vt " + t[0].ToString("0.######", ci) + " " + t[1].ToString("0.######", ci)); }
         foreach (float[] nn in normals) { obj.AppendLine("vn " + (nn[0] * sx).ToString("0.######", ci) + " " + nn[1].ToString("0.######", ci) + " " + nn[2].ToString("0.######", ci)); }
-        obj.AppendLine("usemtl ClearLogo");
-        obj.Append(faces.ToString());
+        obj.AppendLine("usemtl ClearLogoBase");
+        obj.Append(baseFaces.ToString());
+        obj.AppendLine("usemtl ClearLogoText");
+        obj.Append(textFaces.ToString());
         File.WriteAllText(objPath, obj.ToString(), new UTF8Encoding(false));
-        Console.WriteLine("loops=" + loops.Count + " segments=" + segmentCount + " verts=" + positions.Count);
+        // 素材の名前の定義（無いと、Unity が2つの素材を1つにまとめてしまう）
+        File.WriteAllText(Path.ChangeExtension(objPath, ".mtl"), "newmtl ClearLogoBase\nKd 1 1 1\n\nnewmtl ClearLogoText\nKd 1 1 1\n", new UTF8Encoding(false));
+        Console.WriteLine("baseSegments=" + baseSegments + " textSegments=" + textSegments + " verts=" + positions.Count);
     }
-
     static float[] SmoothNormal(float[] a, float[] b)
     {
         // 緩やかな曲がりは、なめらかにつなぐ。急な角は、そのまま角にする
@@ -462,12 +499,12 @@ public static class ClearLogoGen
 
     // 側面の四角。法線の向きに合わせて、三角形の並びを決める（OBJ は反時計回りが表）
     static void AddSideQuad(List<float[]> pos, List<float[]> uv, List<float[]> nor, StringBuilder faces,
-        float[] p0, float[] p1, float[] n0, float[] n1, float u, float v, float sx)
+        float[] p0, float[] p1, float[] n0, float[] n1, float zA, float zB, float u, float v, float sx)
     {
-        float[] a = new float[] { p0[0], p0[1], -HalfThickness };
-        float[] b = new float[] { p1[0], p1[1], -HalfThickness };
-        float[] c = new float[] { p1[0], p1[1], HalfThickness };
-        float[] d = new float[] { p0[0], p0[1], HalfThickness };
+        float[] a = new float[] { p0[0], p0[1], zA };
+        float[] b = new float[] { p1[0], p1[1], zA };
+        float[] c = new float[] { p1[0], p1[1], zB };
+        float[] d = new float[] { p0[0], p0[1], zB };
         int start = pos.Count;
         pos.Add(a); pos.Add(b); pos.Add(c); pos.Add(d);
         for (int i = 0; i < 4; i++) { uv.Add(new float[] { u, v }); }
