@@ -15,8 +15,9 @@ public class GameHud : MonoBehaviour, IMenuSelector
 {
     // 「ステージ選択へ」で遷移するシーン名（Build Settings に入れておくこと）
     [SerializeField] private string k_StageSelectScene = "ModeSelectScene";
-    // ヒントの動画のファイル名（Assets/StreamingAssets の中に置く。エクストラステージのポーズにだけ「ヒント」ボタンが出る）
-    [SerializeField] private string k_HintVideoFile = "Hint.mp4";
+    // ヒントの動画のファイル名は、ステージごとに「Hint_シーン名.mp4」（例：Hint_kiraScene.mp4）。Assets/StreamingAssets の中に置く。
+    // エクストラステージだけは、昔の名前の Hint.mp4 でも流れる
+    private const string k_LegacyHintFile = "Hint.mp4";
 
     // 選んでいるボタンの大きさ（選んでいないときは 1）と、大きさが変わる速さ
     [SerializeField] private float k_SelectedScale = 1.2f;
@@ -360,8 +361,9 @@ public class GameHud : MonoBehaviour, IMenuSelector
         SetRect(pauseTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.0f, 260.0f), new Vector2(1000.0f, 160.0f));
         TMP_Text pauseHint = CreateText("PauseHint", pausePanel_.transform, "十字キー：選ぶ　　Aボタン：決定　　スタート／Bボタン：再開", 32, new Color(1.0f, 1.0f, 1.0f, 0.75f));
         SetRect(pauseHint.rectTransform, new Vector2(0.5f, 0.0f), new Vector2(0.5f, 0.0f), new Vector2(0.0f, 60.0f), new Vector2(1500.0f, 50.0f));
-        // ポーズのメニューのボタン。エクストラステージのポーズにだけ、「ヒント」（動画）のボタンが入る
-        bool hasHint = SceneManager.GetActiveScene().name == StageProgress.ExtraStage;
+        // ポーズのメニューのボタン。どのステージのポーズにも、「ヒント」（動画）のボタンが入る
+        string sceneName = SceneManager.GetActiveScene().name;
+        bool hasHint = true;
         System.Collections.Generic.List<PauseAction> actions = new System.Collections.Generic.List<PauseAction>();
         System.Collections.Generic.List<string> labels = new System.Collections.Generic.List<string>();
         actions.Add(PauseAction.Resume); labels.Add("再開");
@@ -394,11 +396,14 @@ public class GameHud : MonoBehaviour, IMenuSelector
             confirmButtons_[i] = CreateButton("ConfirmButton" + i, window.transform, confirmLabels[i], new Vector2(-210.0f + 420.0f * i, -100.0f), new Vector2(360.0f, 100.0f));
         }
 
-        // ヒントの動画（エクストラステージのポーズだけ。いちばん手前に出す）。動画が終わる・閉じたら、ポーズのメニューに戻る
-        if (hasHint)
+        // ヒントの動画（いちばん手前に出す）。動画が終わる・閉じたら、ポーズのメニューに戻る
+        string hintFile = "Hint_" + sceneName + ".mp4";
+        if (sceneName == StageProgress.ExtraStage
+            && !System.IO.File.Exists(System.IO.Path.Combine(Application.streamingAssetsPath, hintFile)))
         {
-            hintView_ = HintVideoView.Create(root, k_HintVideoFile, OnHintClosed);
+            hintFile = k_LegacyHintFile;
         }
+        hintView_ = HintVideoView.Create(root, hintFile, OnHintClosed);
     }
 
     // ヒントの動画が閉じたとき：ポーズのメニューに戻って、「ヒント」のボタンを選んだ状態にする
