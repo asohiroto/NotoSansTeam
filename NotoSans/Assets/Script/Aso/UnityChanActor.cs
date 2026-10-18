@@ -43,6 +43,12 @@ public class UnityChanActor : MonoBehaviour
     // 演出用のUnityちゃんを出す。heightRate は、画面の高さに対する背の高さの割合
     public static UnityChanActor Spawn(Behavior behavior, float viewX, float feetY, float depth, float heightRate)
     {
+        // すでにそのシーンにいるときは、もう1人出さない（何かの理由で呼ばれても、増えないように）
+        if (FindAnyObjectByType<UnityChanActor>() != null)
+        {
+            return null;
+        }
+
         Camera cam = Camera.main;
         GameObject prefab = Resources.Load<GameObject>(k_PrefabName);
         RuntimeAnimatorController controller = Resources.Load<RuntimeAnimatorController>(k_ControllerName);

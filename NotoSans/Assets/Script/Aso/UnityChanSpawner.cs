@@ -11,6 +11,9 @@ public static class UnityChanSpawner
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Boot()
     {
+        // エディターで「ドメインの再読み込みをしない」設定のときは、前の再生の登録が残る。
+        // 先に外してから登録して、いつも1つだけにする（登録が重なると、シーンを読み込むたびにUnityちゃんが増える）
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneLoaded += OnSceneLoaded;
         // 最初のシーンは、起動時にすでに読み込まれている
         Spawn(SceneManager.GetActiveScene().name);
