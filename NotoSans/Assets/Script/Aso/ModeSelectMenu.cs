@@ -371,6 +371,11 @@ public class ModeSelectMenu : MonoBehaviour, IMenuSelector
     // 選んでいるボタンを大きく・明るくする
     void Apply(bool immediate)
     {
+        // 背景は、選んでいるステージの一部にする
+        if (k_Cards.Length > 0)
+        {
+            SceneBackdrop.Show(SceneBackdrop.NameForStage(k_Cards[selected_].SceneName));
+        }
         for (int i = 0; i < k_Cards.Length; i++)
         {
             bool on = i == selected_;
