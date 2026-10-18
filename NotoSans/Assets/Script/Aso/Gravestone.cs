@@ -43,7 +43,13 @@ public class Gravestone : MonoBehaviour
         obj.AddComponent<MeshFilter>().sharedMesh = GetMesh();
         MeshRenderer renderer = obj.AddComponent<MeshRenderer>();
         // 1つ目：石の面、2つ目：輪郭線（ふくらませた裏面だけを暗い色で描く）
-        renderer.sharedMaterials = new Material[] { GetMaterial(), GetOutlineMaterial() };
+        // 素材を作れなかったとき（シェーダーが見つからないなど）は、無い素材を飛ばす。ここで止まって、死亡の処理を止めないようにする
+        List<Material> materials = new List<Material>();
+        Material stone = GetMaterial();
+        Material outline = GetOutlineMaterial();
+        if (stone != null) { materials.Add(stone); }
+        if (outline != null) { materials.Add(outline); }
+        renderer.sharedMaterials = materials.ToArray();
         // 影は落とさない（軽くするため）
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         Gravestone grave = obj.AddComponent<Gravestone>();
@@ -90,14 +96,30 @@ public class Gravestone : MonoBehaviour
 
     // ---- モデル（実行時に1つだけ作って、全部の墓で使い回す） ----
 
+    // ビルドに入っているシェーダーだけを使う。Shader.Find は、ビルドに含まれていないシェーダーだと null を返す
+    // （どの素材からも使われていないシェーダーは、ビルドから外される）。ゲームの素材が使っている URP の Lit を使う
+    private static Shader FindShader()
+    {
+        Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+        if (shader == null)
+        {
+            shader = Shader.Find("Universal Render Pipeline/Simple Lit");
+        }
+        if (shader == null)
+        {
+            shader = Shader.Find("Sprites/Default");
+        }
+        return shader;
+    }
+
     private static Material GetMaterial()
     {
         if (material_ == null)
         {
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+            Shader shader = FindShader();
             if (shader == null)
             {
-                shader = Shader.Find("Standard");
+                return null;
             }
             material_ = new Material(shader);
             material_.name = "GravestoneMaterial";
@@ -115,15 +137,16 @@ public class Gravestone : MonoBehaviour
         return material_;
     }
 
-    // 輪郭線用の素材。ふくらませたモデルの「表側の面を描かない」ので、はみ出した裏面だけが縁取りとして見える
+    // 輪郭線用の素材。ふくらませたモデルの「表側の面を描かない」ので、はみ出した裏面だけが縁取りとして見える。
+    // 光を受けても暗いままになるよう、艶と反射は切っておく
     private static Material GetOutlineMaterial()
     {
         if (outlineMaterial_ == null)
         {
-            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+            Shader shader = FindShader();
             if (shader == null)
             {
-                shader = Shader.Find("Unlit/Color");
+                return null;
             }
             outlineMaterial_ = new Material(shader);
             outlineMaterial_.name = "GravestoneOutlineMaterial";
@@ -131,6 +154,22 @@ public class Gravestone : MonoBehaviour
             if (outlineMaterial_.HasProperty("_BaseColor"))
             {
                 outlineMaterial_.SetColor("_BaseColor", k_OutlineColor);
+            }
+            if (outlineMaterial_.HasProperty("_Smoothness"))
+            {
+                outlineMaterial_.SetFloat("_Smoothness", 0.0f);
+            }
+            if (outlineMaterial_.HasProperty("_Metallic"))
+            {
+                outlineMaterial_.SetFloat("_Metallic", 0.0f);
+            }
+            if (outlineMaterial_.HasProperty("_SpecularHighlights"))
+            {
+                outlineMaterial_.SetFloat("_SpecularHighlights", 0.0f);
+            }
+            if (outlineMaterial_.HasProperty("_EnvironmentReflections"))
+            {
+                outlineMaterial_.SetFloat("_EnvironmentReflections", 0.0f);
             }
             // 表側の面（Front）を描かない（0＝両面、1＝表を描かない、2＝裏を描かない）
             if (outlineMaterial_.HasProperty("_Cull"))
@@ -140,7 +179,6 @@ public class Gravestone : MonoBehaviour
         }
         return outlineMaterial_;
     }
-
     // 下から「土台」「墓石の本体」「墓石の上の細い部分」を重ねる。足元（y=0）が底。
     // 1つ目の面の組が石、2つ目が少しふくらませた輪郭線用
     private static Mesh GetMesh()

@@ -100,13 +100,29 @@ public class StageManager : MonoBehaviour
         // 1回の死につき1つだけ数える（リセット中に重ねて呼ばれた分は上で弾いている）
         self.deathCount_++;
         // 死んだ場所に墓を立てる（プレイヤーを隠すより前に、位置を取っておく）
-        if (self.player_ != null)
+        // 墓・セーブ・音は「おまけ」の処理。ここで失敗しても、プレイヤーを隠してリセットする処理（下の StartCoroutine）は必ず行う
+        // （途中で例外が出て止まると、プレイヤーが床に残り続けて、死亡の処理が毎フレーム走ってしまう）
+        try
         {
-            Gravestone.Spawn(self.player_.transform.position);
+            if (self.player_ != null)
+            {
+                Gravestone.Spawn(self.player_.transform.position);
+            }
         }
-        // ステージごとの累計死亡数をセーブする（モード選択で表示する）
-        SaveData.AddDeath(SceneManager.GetActiveScene().name);
-        SoundEffects.Play(SoundEffects.Se.Bomb);
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("StageManager: 墓を立てられませんでした: " + e.Message);
+        }
+        try
+        {
+            // ステージごとの累計死亡数をセーブする（モード選択で表示する）
+            SaveData.AddDeath(SceneManager.GetActiveScene().name);
+            SoundEffects.Play(SoundEffects.Se.Bomb);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("StageManager: 死亡の記録・音で失敗しました: " + e.Message);
+        }
         self.StartCoroutine(self.ResetRoutine());
     }
 
