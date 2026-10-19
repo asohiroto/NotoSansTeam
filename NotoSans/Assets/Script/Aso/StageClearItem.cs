@@ -56,7 +56,13 @@ public class StageClearItem : MonoBehaviour
         cleared_ = true;
         Cleared = true;
         // ステージごとの累計クリア数をセーブする（モード選択で表示・次のステージの解放に使う）
+        // 1度も落ちずにクリアしたかは、クリアを数える前の死亡数ではなく、このステージでの死亡数で決める
+        bool noDeath = StageManager.DeathCount == 0;
         SaveData.AddClear(current);
+        if (noDeath)
+        {
+            Achievements.OnNoDeathClear(current);
+        }
         // クリアシーンへ行くなら、「行ったことがある」を記録する（エクストラステージのボタンが出る）
         if (next == StageProgress.ClearScene)
         {

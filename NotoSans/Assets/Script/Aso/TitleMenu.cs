@@ -18,6 +18,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         Quit,
         // 操作説明の画像を出す（シーンに保存されている番号がずれないよう、いちばん後ろに足している）
         Controls,
+        // 実績の一覧を出す（同じく、いちばん後ろに足している）
+        Achievements,
     }
 
     // 選べるボタン（順番に）と、そのボタンを押したときの動き（同じ順番）
@@ -46,6 +48,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
     private OptionsPanel optionsPanel_;
     // 操作説明の画像
     private ControlsGuideView guideView_;
+    // 実績の一覧
+    private AchievementsPanel achievementsPanel_;
 
     void Start()
     {
@@ -64,9 +68,11 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
 
         // オプションのボタンが無ければ、他のボタンを複製して差し込む（シーンの設定が古くても、必ず出る）
         EnsureExtraButton(MenuAction.Options, "Button_Options", "オプション", 1);
-        EnsureExtraButton(MenuAction.Controls, "Button_Controls", "操作説明", 2);
+        EnsureExtraButton(MenuAction.Achievements, "Button_Achievements", "実績", 2);
+        EnsureExtraButton(MenuAction.Controls, "Button_Controls", "操作説明", 3);
         LayoutButtons();
         optionsPanel_ = OptionsPanel.Create(canvasRoot);
+        achievementsPanel_ = AchievementsPanel.Create(canvasRoot);
         guideView_ = ControlsGuideView.Create(canvasRoot);
         GameFonts.ApplyBody(canvasRoot);
 
@@ -113,7 +119,8 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
 
     }
 
-    // ボタンを並べる。上から1行ずつ。「オプション」と「操作説明」は、1行に横並びにする（画面に収めるため）
+    // ボタンを並べる。最初の4つ（ステージ選択・オプション／実績・操作説明）は、2つずつ横並びの2行にして、
+    // 残り（ゲームをやめる）は、その下に1行ずつ中央に置く（画面に収めるため）
     void LayoutButtons()
     {
         if (k_Buttons == null || k_Buttons.Length == 0)
@@ -122,38 +129,25 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         }
         float topY = 320.0f;
         float spacing = 115.0f;
-        float centerX = k_Buttons[0].anchoredPosition.x;
+        // 並べ替える前の、ボタンの中央の位置（最後のボタンはそのまま中央にある）
+        float centerX = k_Buttons[k_Buttons.Length - 1].anchoredPosition.x;
         float width = k_Buttons[0].sizeDelta.x;
         // 他のボタンと同じ大きさのまま、左右に並べる（選んで大きくなっても重ならないよう、間を空ける）
-        float half = width;
         float offset = width * 0.6f;
 
-        int row = 0;
-        bool sideRow = false;
+        const int pairedCount = 4;
         for (int i = 0; i < k_Buttons.Length; i++)
         {
-            bool side = k_Actions[i] == MenuAction.Options || k_Actions[i] == MenuAction.Controls;
-            if (side)
+            if (k_Buttons.Length > pairedCount && i < pairedCount)
             {
-                // 横並びの1つ目で行を進め、2つ目は同じ行に置く
-                if (!sideRow)
-                {
-                    sideRow = true;
-                    k_Buttons[i].anchoredPosition = new Vector2(centerX - offset, topY - spacing * row);
-                }
-                else
-                {
-                    k_Buttons[i].anchoredPosition = new Vector2(centerX + offset, topY - spacing * row);
-                    sideRow = false;
-                    row++;
-                    k_Buttons[i].sizeDelta = new Vector2(half, k_Buttons[i].sizeDelta.y);
-                    k_Buttons[i - 1].sizeDelta = new Vector2(half, k_Buttons[i - 1].sizeDelta.y);
-                    continue;
-                }
-                continue;
+                float x = centerX + (i % 2 == 0 ? -offset : offset);
+                k_Buttons[i].anchoredPosition = new Vector2(x, topY - spacing * (i / 2));
             }
-            k_Buttons[i].anchoredPosition = new Vector2(centerX, topY - spacing * row);
-            row++;
+            else
+            {
+                int row = k_Buttons.Length > pairedCount ? 2 + (i - pairedCount) : i;
+                k_Buttons[i].anchoredPosition = new Vector2(centerX, topY - spacing * row);
+            }
         }
     }
 
@@ -173,6 +167,13 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
             return;
         }
 
+        // 実績の一覧が開いている間（と、閉じたフレーム）も同じ
+        if (achievementsPanel_ != null && (achievementsPanel_.IsOpen || Time.frameCount <= achievementsPanel_.LastChangeFrame))
+        {
+            Apply(false);
+            return;
+        }
+
         // 操作説明の画像が開いている間（と、閉じたフレーム）も同じ
         if (guideView_ != null && (guideView_.IsOpen || Time.frameCount <= guideView_.LastChangeFrame))
         {
@@ -180,28 +181,37 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
             return;
         }
 
-        int move = 0;
+        int moveX = 0;
+        int moveY = 0;
         bool submit = false;
 
         Gamepad pad = Gamepad.current;
         if (pad != null)
         {
-            if (pad.dpad.up.wasPressedThisFrame || pad.dpad.left.wasPressedThisFrame) { move = -1; }
-            if (pad.dpad.down.wasPressedThisFrame || pad.dpad.right.wasPressedThisFrame) { move = 1; }
+            if (pad.dpad.up.wasPressedThisFrame) { moveY = 1; }
+            if (pad.dpad.down.wasPressedThisFrame) { moveY = -1; }
+            if (pad.dpad.left.wasPressedThisFrame) { moveX = -1; }
+            if (pad.dpad.right.wasPressedThisFrame) { moveX = 1; }
             if (pad.buttonSouth.wasPressedThisFrame) { submit = true; }
         }
         Keyboard keyboard = Keyboard.current;
         if (keyboard != null)
         {
-            if (keyboard.upArrowKey.wasPressedThisFrame || keyboard.leftArrowKey.wasPressedThisFrame) { move = -1; }
-            if (keyboard.downArrowKey.wasPressedThisFrame || keyboard.rightArrowKey.wasPressedThisFrame) { move = 1; }
+            if (keyboard.upArrowKey.wasPressedThisFrame) { moveY = 1; }
+            if (keyboard.downArrowKey.wasPressedThisFrame) { moveY = -1; }
+            if (keyboard.leftArrowKey.wasPressedThisFrame) { moveX = -1; }
+            if (keyboard.rightArrowKey.wasPressedThisFrame) { moveX = 1; }
             if (keyboard.enterKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame) { submit = true; }
         }
 
-        if (move != 0 && k_Buttons.Length > 0)
+        if ((moveX != 0 || moveY != 0) && k_Buttons.Length > 0)
         {
-            selected_ = (selected_ + move + k_Buttons.Length) % k_Buttons.Length;
-            SoundEffects.Play(SoundEffects.Se.Change);
+            int next = FindNext(selected_, moveX, moveY);
+            if (next != selected_)
+            {
+                selected_ = next;
+                SoundEffects.Play(SoundEffects.Se.Change);
+            }
         }
         if (submit)
         {
@@ -209,6 +219,79 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
         }
 
         Apply(false);
+    }
+
+    // ボタンの並び（画面上の位置）に合わせて、十字キーを押した方向にあるボタンを選ぶ。
+    // 左右は同じ行の中で、上下は隣の行へ（行の中では、いまの位置にいちばん近いボタン）。端では、反対側へまわる
+    private int FindNext(int from, int dx, int dy)
+    {
+        Vector2 origin = k_Buttons[from].anchoredPosition;
+        const float rowTolerance = 1.0f;
+        int best = from;
+        float bestScore = float.MaxValue;
+
+        // 方向にあるボタンの中で、いちばん近いものを探す
+        for (int i = 0; i < k_Buttons.Length; i++)
+        {
+            if (i == from)
+            {
+                continue;
+            }
+            Vector2 d = k_Buttons[i].anchoredPosition - origin;
+            bool sameRow = Mathf.Abs(d.y) < rowTolerance;
+            float score;
+            if (dx != 0)
+            {
+                if (!sameRow || d.x * dx <= 0.0f) { continue; }
+                score = Mathf.Abs(d.x);
+            }
+            else
+            {
+                if (sameRow || d.y * dy <= 0.0f) { continue; }
+                // 行の近さを優先して、同じ行の中では、横の位置が近いものを選ぶ
+                score = Mathf.Abs(d.y) * 10.0f + Mathf.Abs(d.x);
+            }
+            if (score < bestScore)
+            {
+                bestScore = score;
+                best = i;
+            }
+        }
+        if (best != from)
+        {
+            return best;
+        }
+
+        // 行き止まり：反対側の端へまわる
+        bestScore = float.MaxValue;
+        for (int i = 0; i < k_Buttons.Length; i++)
+        {
+            if (i == from)
+            {
+                continue;
+            }
+            Vector2 d = k_Buttons[i].anchoredPosition - origin;
+            bool sameRow = Mathf.Abs(d.y) < rowTolerance;
+            float score;
+            if (dx != 0)
+            {
+                if (!sameRow) { continue; }
+                // 反対側の、いちばん遠いもの
+                score = -Mathf.Abs(d.x);
+            }
+            else
+            {
+                if (sameRow) { continue; }
+                // 反対の端の行（遠い行）で、横の位置が近いもの
+                score = -Mathf.Abs(d.y) * 10.0f + Mathf.Abs(d.x);
+            }
+            if (score < bestScore)
+            {
+                bestScore = score;
+                best = i;
+            }
+        }
+        return best;
     }
 
     // マウスが乗ったとき
@@ -238,6 +321,13 @@ public class TitleMenu : MonoBehaviour, IMenuSelector
                 if (optionsPanel_ != null)
                 {
                     optionsPanel_.Open();
+                }
+                break;
+            case MenuAction.Achievements:
+                SoundEffects.Play(SoundEffects.Se.Select);
+                if (achievementsPanel_ != null)
+                {
+                    achievementsPanel_.Open();
                 }
                 break;
             case MenuAction.Controls:

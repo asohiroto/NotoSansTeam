@@ -352,6 +352,9 @@ public class GameHud : MonoBehaviour, IMenuSelector
         deathText_.rectTransform.offsetMin = Vector2.zero;
         deathText_.rectTransform.offsetMax = Vector2.zero;
 
+        // 右上：ステージの進み具合のゲージ（最高到達点のピン・ゴールまでの残りメートル）
+        StageGauge.Create(root);
+
         // ポーズ：画面全体を暗くして、メニューを出す
         Image pauseBack = CreateImage("PausePanel", root, new Color(0.0f, 0.0f, 0.0f, 0.6f));
         Stretch(pauseBack.rectTransform);

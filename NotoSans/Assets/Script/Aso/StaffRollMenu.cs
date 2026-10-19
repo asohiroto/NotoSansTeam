@@ -77,6 +77,7 @@ public class StaffRollMenu : MonoBehaviour
             if (position_ >= contentHeight_ + 200.0f)
             {
                 finished_ = true;
+                Achievements.Unlock("staff_roll");
                 endText_.gameObject.SetActive(true);
                 content_.gameObject.SetActive(false);
             }

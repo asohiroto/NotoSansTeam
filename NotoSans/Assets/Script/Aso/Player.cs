@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     private Rigidbody rigidbody_;
     // 死んでいるか（リセットされるまで、死亡の処理を1回だけにするため）
     private bool dead_ = false;
-
+    // 今回の命で、何か操作したか
+    private bool operated_ = false;
     // 残弾数
     public int remainAmmunition_ = 0;
     // 体力
@@ -33,6 +34,8 @@ public class Player : MonoBehaviour
     public Vector3 jumpSpeed_ = Vector3.zero;
     // 床の上にいるか
     public bool isGround_ = false;
+    // スタート地点の高さ（ステージの進み具合のゲージに使う）
+    public float StartY { get { return kFirstPosition_.y; } }
     // 落下速度の最大値（1回の物理更新あたり。負の値）
     public float MaxFallSpeed { get { return kPlayerMinSpeed_.y; } }
 
@@ -62,13 +65,50 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // 今回の命で、何か操作したか（落ちたあとに止まらないよう、実績に使う）
+        if (!operated_ && AnyInput())
+        {
+            operated_ = true;
+        }
+    }
 
+    // キーボード・ゲームパッド・マウスのどれかが、押されている（動かされている）か
+    private static bool AnyInput()
+    {
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && keyboard.anyKey.isPressed)
+        {
+            return true;
+        }
+        Mouse mouse = Mouse.current;
+        if (mouse != null && (mouse.leftButton.isPressed || mouse.rightButton.isPressed))
+        {
+            return true;
+        }
+        Gamepad pad = Gamepad.current;
+        if (pad != null)
+        {
+            if (pad.leftStick.ReadValue().sqrMagnitude > 0.04f || pad.rightStick.ReadValue().sqrMagnitude > 0.04f)
+            {
+                return true;
+            }
+            foreach (UnityEngine.InputSystem.InputControl control in pad.allControls)
+            {
+                UnityEngine.InputSystem.Controls.ButtonControl button = control as UnityEngine.InputSystem.Controls.ButtonControl;
+                if (button != null && button.isPressed)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // 初期位置・体力・弾薬・速度・状態を最初の状態に戻す（StageManager から呼ぶ）
     public void Respawn()
     {
         dead_ = false;
+        operated_ = false;
         transform.position = kFirstPosition_;
         hp_ = k_MaxHp;
         remainAmmunition_ = k_MaxAmmunition;
@@ -134,6 +174,7 @@ public class Player : MonoBehaviour
             if (speed_.y <= 0.0f && hit.collider.CompareTag("Floor"))
             {
                 dead_ = true;
+                Achievements.OnPlayerDied(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, transform.position, operated_);
                 EffectManager.PlayDeath(bodyCenter);
                 // プレイヤーを隠し、少し待ってからステージをリセットして初期位置に戻す
                 StageManager.OnPlayerDied();

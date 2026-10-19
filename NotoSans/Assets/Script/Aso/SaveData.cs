@@ -19,6 +19,8 @@ public static class SaveData
         public int clears;
         // 一度でもクリアしたか。スコアを削除しても消さない（次のステージの解放に使う）
         public bool cleared;
+        // 最高到達点（スタートから落ちた距離。メートル）
+        public float bestDepth;
     }
 
     [Serializable]
@@ -29,6 +31,8 @@ public static class SaveData
         public bool clearSceneSeen;
         // エクストラステージを解放したか。一度解放したら、スコアを削除しても閉じない
         public bool extraUnlocked;
+        // 達成した実績の ID（スコアを削除しても消さない）
+        public List<string> achievements = new List<string>();
     }
 
     // データフォルダの中のセーブ用フォルダ名・ファイル名。
@@ -75,10 +79,28 @@ public static class SaveData
         return total > 0 ? (float)clears / total : 0.0f;
     }
 
+    // 最高到達点（スタートから落ちた距離。メートル）。スコアを削除すると 0 に戻る
+    public static float GetBestDepth(string stage)
+    {
+        StageRecord record = Find(stage, false);
+        return record != null ? record.bestDepth : 0.0f;
+    }
+
+    public static void SetBestDepth(string stage, float depth)
+    {
+        StageRecord record = Find(stage, true);
+        if (depth > record.bestDepth)
+        {
+            record.bestDepth = depth;
+            Save();
+        }
+    }
+
     public static void AddDeath(string stage)
     {
         Find(stage, true).deaths++;
         Save();
+        Achievements.Evaluate();
     }
 
     public static void AddClear(string stage)
@@ -87,6 +109,40 @@ public static class SaveData
         record.clears++;
         record.cleared = true;
         Save();
+        Achievements.Evaluate();
+    }
+
+    // 全ステージの累計死亡数
+    public static int TotalDeaths
+    {
+        get
+        {
+            if (file_ == null) { Load(); }
+            int total = 0;
+            foreach (StageRecord record in file_.stages)
+            {
+                total += record.deaths;
+            }
+            return total;
+        }
+    }
+
+    public static bool IsAchievementUnlocked(string id)
+    {
+        if (file_ == null) { Load(); }
+        return file_.achievements.Contains(id);
+    }
+
+    // 実績を達成にする。はじめて達成したときだけ true
+    public static bool AddAchievement(string id)
+    {
+        if (IsAchievementUnlocked(id))
+        {
+            return false;
+        }
+        file_.achievements.Add(id);
+        Save();
+        return true;
     }
 
     // 一度でもクリアシーンに行ったか
@@ -190,6 +246,10 @@ public static class SaveData
                 if (loaded != null && loaded.stages != null)
                 {
                     file_ = loaded;
+                    if (file_.achievements == null)
+                    {
+                        file_.achievements = new List<string>();
+                    }
                 }
             }
         }

@@ -59,6 +59,7 @@ public class HintVideoView : MonoBehaviour
 
         message_.gameObject.SetActive(false);
         screen_.gameObject.SetActive(true);
+        Achievements.Unlock("hint");
         player_.source = VideoSource.Url;
         player_.url = path;
         audio_.volume = GameSettings.SeVolume;
